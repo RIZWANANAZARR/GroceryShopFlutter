@@ -10,7 +10,7 @@ Flutter Grocery App UI
 
 ## Screenshots  
 
-<p float="left">
+<!--<p float="left">
   <img src="screenshots/1.jpg" width="200" />
   <img src="screenshots/2.jpg" width="200" /> 
   <img src="screenshots/3.jpg" width="200" />
@@ -24,7 +24,7 @@ Flutter Grocery App UI
   <img src="screenshots/11.jpg" width="200" />
   <img src="screenshots/12.jpg" width="200" />
   <img src="screenshots/13.jpg" width="200" />
-</p>
+</p>-->
 
 -------------  
 
