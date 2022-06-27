@@ -8,7 +8,6 @@ Flutter Grocery App UI
   
 -------------  
 
-//## Screenshots  
 
 <!--<p float="left">
   <img src="screenshots/1.jpg" width="200" />
