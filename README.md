@@ -7,7 +7,8 @@ Flutter Grocery App UI
  
   
 -------------  
-
+<p float="left">
+  <img src ="https://is4-ssl.mzstatic.com/image/thumb/PurpleSource112/v4/8d/ba/9f/8dba9fb3-0c08-1a72-ba60-a7fa8fc6a18c/f55e2f14-f2be-470e-b63f-7f4ddd580904_Welcome.png/1284x2778bb.png" />
 
 <!--<p float="left">
   <img src="screenshots/1.jpg" width="200" />
