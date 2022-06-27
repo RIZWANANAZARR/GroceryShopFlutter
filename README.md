@@ -16,7 +16,7 @@ Flutter Grocery App UI
 
   <img src ="https://is2-ssl.mzstatic.com/image/thumb/PurpleSource112/v4/7e/27/96/7e2796f5-f709-aee3-1444-f1ed7a3f9c7f/ef59e780-e977-4a67-9281-3ef6847c1384_DashBoard.png/1284x2778bb.png" width="200" />
   <img src ="https://is2-ssl.mzstatic.com/image/thumb/PurpleSource122/v4/3d/23/7a/3d237a8c-85c2-2c55-084a-f9e64e225770/b93b74b4-5b1d-4968-98e4-ccdc10f9a2fb_ProductDetails.png/1284x2778bb.png" width="200"/>
-  <img src ="https://is5-ssl.mzstatic.com/image/thumb/PurpleSource112/v4/f9/c4/5a/f9c45abe-8da7-60f6-26cc-d3a652ee6f8e/a2b99182-52a5-4f61-bfab-2cad58133eea_Explore.png/1284x2778bb.png" />
+  <img src ="https://is5-ssl.mzstatic.com/image/thumb/PurpleSource112/v4/f9/c4/5a/f9c45abe-8da7-60f6-26cc-d3a652ee6f8e/a2b99182-52a5-4f61-bfab-2cad58133eea_Explore.png/1284x2778bb.png" width="200"/>
   <img src ="https://is3-ssl.mzstatic.com/image/thumb/PurpleSource122/v4/56/c3/fd/56c3fd43-63fd-f78c-dc6a-ad0cb1311823/e7aa6e77-b746-4fe0-987f-8b7c2efa4bb4_Favorites.png/1284x2778bb.png" width="200"/>
   <img src ="https://is5-ssl.mzstatic.com/image/thumb/PurpleSource122/v4/60/9f/de/609fde11-ff04-c06d-1e8b-189c02711694/aabb2745-f017-4030-9cfe-1911ff5278d8_Cart.png/1284x2778bb.png" width="200"/>
   <img src ="https://is3-ssl.mzstatic.com/image/thumb/PurpleSource122/v4/78/c5/80/78c58088-a509-8698-fa6f-502bdf678d01/58022f63-8ddb-4ce4-9633-f6479b30090b_OrderSummary.png/1284x2778bb.png" width="200"/>
