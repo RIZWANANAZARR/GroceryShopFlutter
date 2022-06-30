@@ -1248,7 +1248,6 @@ class _OrderProductAddEditState extends BaseState<OrderProductAddEdit>
                                 finalCheckingItems.Remarks = Remarks.text;
                               });
                               TotalAmountCalculation();
-
                               Navigator.pop(context123);
                             } else {
                               commonalertbox(
