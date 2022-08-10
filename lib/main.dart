@@ -35,6 +35,7 @@ Future<void> main() async {
 
   checkPermissionStatus();
   getToken();
+
   runApp(MyApp());
 }
 

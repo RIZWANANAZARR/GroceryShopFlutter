@@ -352,13 +352,21 @@ class _ProductBrandPaginationState extends BaseState<ProductBrandPagination>
                       },
                       errorBuilder: (BuildContext context, Object exception,
                           StackTrace stackTrace) {
-                        return Image.asset(NO_IMAGE_FOUND);
+                        return Image.asset(
+                          NO_IMAGE_FOUND,
+                          height: 35,
+                          width: 35,
+                        );
                       },
                       height: 35,
                       fit: BoxFit.fill,
                       width: 35,
                     )
-                  : Image.asset(NO_IMAGE_FOUND),
+                  : Image.asset(
+                      NO_IMAGE_FOUND,
+                      height: 35,
+                      width: 35,
+                    ),
               children: [
                 Divider(
                   thickness: 1.0,

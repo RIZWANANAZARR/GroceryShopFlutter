@@ -212,8 +212,10 @@ class PdfInvoiceApi {
         .map((item) => item.unitPrice * item.quantity)
         .reduce((item1, item2) => item1 + item2);
     double vattotal = 0.00;
+    double TotolQTY = 0;
     for (int i = 0; i < invoice.items.length; i++) {
       vattotal += invoice.items[i].vat;
+      TotolQTY += invoice.items[i].quantity;
     }
     final vatPercent = vattotal;
     final vat = double.parse(vatamnt1); //netTotal * vatPercent / 100;
@@ -229,6 +231,11 @@ class PdfInvoiceApi {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                buildText(
+                  title: 'Total QTY',
+                  value: Utils.formatWithoutSignPrice(TotolQTY),
+                  unite: true,
+                ),
                 buildText(
                   title: 'BasicAmount',
                   value: Utils.formatPrice(netTotal),

@@ -174,3 +174,9 @@ class LoginRequestCallEvent extends CategoryScreenEvents {
 
   LoginRequestCallEvent(this.loginRequest);
 }
+
+class ProductReportingListRequestCallEvent extends CategoryScreenEvents {
+  final ProductReportingListRequest productReportingListRequest;
+
+  ProductReportingListRequestCallEvent(this.productReportingListRequest);
+}

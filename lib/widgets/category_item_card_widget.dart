@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:grocery_app/common_widgets/app_text.dart';
 import 'package:grocery_app/models/category_item.dart';
+import 'package:grocery_app/ui/image_resource.dart';
 
 class CategoryItemCardWidget extends StatelessWidget {
   CategoryItemCardWidget({Key key, this.item, this.color = Colors.blue})
@@ -58,8 +59,24 @@ class CategoryItemCardWidget extends StatelessWidget {
         item.imagePath,
         fit: BoxFit.contain,
       ),*/
-
           Image.network(
+        item.imagePath,
+        frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
+          return child;
+        },
+        loadingBuilder: (context, child, loadingProgress) {
+          if (loadingProgress == null) {
+            return child;
+          } else {
+            return CircularProgressIndicator();
+          }
+        },
+        errorBuilder:
+            (BuildContext context, Object exception, StackTrace stackTrace) {
+          return Image.asset(NO_IMAGE_FOUND);
+        },
+      )
+      /* Image.network(
         item.imagePath,
         frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
           return child;
@@ -77,7 +94,8 @@ class CategoryItemCardWidget extends StatelessWidget {
         },
         height: 35,
         width: 35,
-      ),
+      )*/
+      ,
       //Image.network(item.imagePath,fit: BoxFit.contain)
     );
   }

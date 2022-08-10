@@ -32,7 +32,6 @@ class _AllProductSearchState extends BaseState<AllProductSearch>
   int selected = 0;
   ProductGroupBloc productGroupBloc;
   ProductPaginationResponse Response;
-
   CategoryListResponse categoryListResponse;
   CategoryListResponseDetails categoryListResponseDetails;
   ProductPaginationDetails details;
@@ -56,6 +55,7 @@ class _AllProductSearchState extends BaseState<AllProductSearch>
     CompanyID = _offlineCompanydetails.details[0].pkId.toString();
 
     productGroupBloc = ProductGroupBloc(baseBloc);
+    searchbar.text = "";
     searchbar.addListener(searchlistner);
 
     /* productGroupBloc
@@ -159,10 +159,11 @@ class _AllProductSearchState extends BaseState<AllProductSearch>
               Expanded(
                 child: RefreshIndicator(
                   onRefresh: () async {
-                    searchbar.clear();
+                    searchbar.text = "";
                     productGroupBloc.add(ProductMasterPaginationCallEvent(
-                        pageNo + 1,
-                        ProductPaginationRequest(CompanyId: CompanyID)));
+                        1,
+                        ProductPaginationRequest(
+                            CompanyId: CompanyID, ActiveFlag: "1")));
                   },
                   child: Container(
                     padding: EdgeInsets.only(

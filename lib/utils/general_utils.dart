@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:grocery_app/models/common/all_name_id.dart';
 import 'package:grocery_app/models/common/globals.dart';
+import 'package:grocery_app/screens/NO_Internet_Connection_Page.dart';
+import 'package:grocery_app/screens/tabview_dashboard/tab_dasboard_screen.dart';
 import 'package:grocery_app/ui/color_resource.dart';
 import 'package:grocery_app/utils/common_widgets.dart';
 
@@ -52,59 +54,67 @@ Future showCommonDialogWithSingleOption(
     context: context,
     barrierDismissible: false,
     builder: (context2) {
-      return Center(
-        child: Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20),
-            color: colorWhite,
-          ),
-          width: double.maxFinite,
-          margin: margin,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Container(
-                constraints: BoxConstraints(minHeight: 100),
-                padding: EdgeInsets.all(10),
-                child: Center(
-                  child: SingleChildScrollView(
-                    child: Text(
-                      message,
-                      maxLines: 15,
-                      textAlign: TextAlign.center,
-                      overflow: TextOverflow.ellipsis,
-                      style: baseTheme.textTheme.button,
+      return message != "Error During Communication: No Internet Connection"
+          ? Center(
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
+                  color: colorWhite,
+                ),
+                width: double.maxFinite,
+                margin: margin,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                      constraints: BoxConstraints(minHeight: 100),
+                      padding: EdgeInsets.all(10),
+                      child: Center(
+                        child: SingleChildScrollView(
+                          child: Text(
+                            message,
+                            maxLines: 15,
+                            textAlign: TextAlign.center,
+                            overflow: TextOverflow.ellipsis,
+                            style: baseTheme.textTheme.button,
+                          ),
+                        ),
+                      ),
                     ),
-                  ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 5.0, right: 5.0),
+                      child: getCommonDivider(),
+                    ),
+                    GestureDetector(
+                      child: Container(
+                        height: 60,
+                        color: Colors.transparent,
+                        child: Center(
+                          child: Text(
+                            positiveButtonTitle,
+                            textAlign: TextAlign.center,
+                            style: baseTheme.textTheme.button
+                                .copyWith(color: colorPrimaryLight),
+                          ),
+                        ),
+                      ),
+                      onTap: onTapOfPositiveButton ??
+                          () {
+                            if (message !=
+                                "Error During Communication: No Internet Connection") {
+                              Navigator.of(Globals.context).pop();
+                            } else {
+                              navigateTo(context, TabHomePage.routeName,
+                                  clearAllStack: true);
+                            }
+                            // Navigator.of(context, rootNavigator: true).pop();
+                          },
+                    )
+                  ],
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(left: 5.0, right: 5.0),
-                child: getCommonDivider(),
-              ),
-              GestureDetector(
-                child: Container(
-                  height: 60,
-                  color: Colors.transparent,
-                  child: Center(
-                    child: Text(
-                      positiveButtonTitle,
-                      textAlign: TextAlign.center,
-                      style: baseTheme.textTheme.button
-                          .copyWith(color: colorPrimaryLight),
-                    ),
-                  ),
-                ),
-                onTap: onTapOfPositiveButton ??
-                    () {
-                      Navigator.of(Globals.context).pop();
-                      // Navigator.of(context, rootNavigator: true).pop();
-                    },
-              )
-            ],
-          ),
-        ),
-      );
+            )
+          : NoInternetConnectionPage();
     },
   );
 }

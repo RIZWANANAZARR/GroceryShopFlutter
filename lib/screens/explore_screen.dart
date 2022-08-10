@@ -279,9 +279,11 @@ class _ExploreScreenState extends BaseState<ExploreScreen>
       groceryItem.name = state.response.details[i].productGroupName;
       groceryItem.id = state.response.details[i].pkID;
       // groceryItem.imagePath = //state.response.details[i].productGroupImage;//"http://122.169.111.101:206/productimages/beverages.png";
-      groceryItem.imagePath = state.response.details[i].productGroupImage == ""
+      groceryItem
+              .imagePath = /*state.response.details[i].productGroupImage == ""
           ? "https://img.icons8.com/bubbles/344/no-image.png"
-          : _offlineCompanydetails.details[0].siteURL +
+          : */
+          _offlineCompanydetails.details[0].siteURL +
               "/productgroupimages" +
               state.response.details[i].productGroupImage;
 
@@ -322,9 +324,11 @@ class _ExploreScreenState extends BaseState<ExploreScreen>
       groceryItem.name = state.response.details[i].productGroupName;
       groceryItem.id = state.response.details[i].productGroupID;
       // groceryItem.imagePath = //state.response.details[i].productGroupImage;//"http://122.169.111.101:206/productimages/beverages.png";
-      groceryItem.imagePath = state.response.details[i].productGroupImage == ""
+      groceryItem
+              .imagePath = /*state.response.details[i].productGroupImage == ""
           ? "https://img.icons8.com/bubbles/344/no-image.png"
-          : _offlineCompanydetails.details[0].siteURL +
+          :*/
+          _offlineCompanydetails.details[0].siteURL +
               "/productgroupimages/" +
               state.response.details[i].productGroupImage;
 

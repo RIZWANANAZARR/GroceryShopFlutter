@@ -53,7 +53,8 @@ const colorgreenforicon = const Color(0xffafd034);
 
 const cardgredient1 = const Color(0xffffdd00);
 const cardgredient2 = const Color(0xfffbb034);
-
+const no_internet_bg_color = const Color(0xffe6e6e6);
+//E6E6E6
 const Map<int, Color> materialColorAccentCodes = {
   50: Color.fromRGBO(255, 255, 255, 1),
   100: Color.fromRGBO(255, 255, 255, 1),

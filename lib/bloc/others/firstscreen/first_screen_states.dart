@@ -40,6 +40,12 @@ class LoginResponseState extends FirstScreenStates {
   LoginResponseState(this.loginResponse);
 }
 
+class DummyLoginResponseState extends FirstScreenStates {
+  final LoginResponse loginResponse;
+
+  DummyLoginResponseState(this.loginResponse);
+}
+
 class ProductFavoriteResponseState extends FirstScreenStates {
   final ProductCartListResponse cartDeleteResponse;
   ProductFavoriteResponseState(this.cartDeleteResponse);
@@ -48,4 +54,19 @@ class ProductFavoriteResponseState extends FirstScreenStates {
 class ProductCartResponseState extends FirstScreenStates {
   final ProductCartListResponse cartDeleteResponse;
   ProductCartResponseState(this.cartDeleteResponse);
+}
+
+class LoginProductCartResponseState extends FirstScreenStates {
+  final ProductCartListResponse cartDeleteResponse;
+  LoginProductCartResponseState(this.cartDeleteResponse);
+}
+
+class CartDeleteResponseState extends FirstScreenStates {
+  final CartDeleteResponse cartDeleteResponse;
+  CartDeleteResponseState(this.cartDeleteResponse);
+}
+
+class InquiryProductSaveResponseState extends FirstScreenStates {
+  final InquiryProductSaveResponse inquiryProductSaveResponse;
+  InquiryProductSaveResponseState(this.inquiryProductSaveResponse);
 }

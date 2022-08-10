@@ -316,14 +316,26 @@ class _ProductPaginationState extends BaseState<ProductPagination>
                           },
                           errorBuilder: (BuildContext context, Object exception,
                               StackTrace stackTrace) {
-                            return Icon(Icons.error);
+                            return Image.asset(
+                              NO_IMAGE_FOUND,
+                              height: 35,
+                              width: 35,
+                            );
                           },
                           height: 35,
                           fit: BoxFit.fill,
                           width: 35,
                         )
-                      : Image.asset(NO_IMAGE_FOUND)
-                  : Icon(Icons.error),
+                      : Image.asset(
+                          NO_IMAGE_FOUND,
+                          height: 35,
+                          width: 35,
+                        )
+                  : Image.asset(
+                      NO_IMAGE_FOUND,
+                      height: 35,
+                      width: 35,
+                    ),
 
               title: Text(
                 Response.details[index].productName,

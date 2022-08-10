@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:grocery_app/bloc/base/base_bloc.dart';
 import 'package:grocery_app/bloc/others/category/category_bloc.dart';
 import 'package:grocery_app/common_widgets/app_button.dart';
 import 'package:grocery_app/common_widgets/app_text.dart';
@@ -12,6 +13,7 @@ import 'package:grocery_app/models/database_models/db_product_cart_details.dart'
 import 'package:grocery_app/models/grocery_item.dart';
 import 'package:grocery_app/screens/base/base_screen.dart';
 import 'package:grocery_app/screens/cart/checkout_bottom_sheet.dart';
+import 'package:grocery_app/screens/login/login_screen.dart';
 import 'package:grocery_app/screens/product_details/product_details_screen.dart';
 import 'package:grocery_app/screens/tabview_dashboard/tab_dasboard_screen.dart';
 import 'package:grocery_app/ui/color_resource.dart';
@@ -115,7 +117,7 @@ class _DynamicCartScreenState extends BaseState<DynamicCartScreen>
     return WillPopScope(
       onWillPop: () {
         getproductlistfromdbMethod();
-
+        // navigateTo(context, ShopDashBoard.routeName, clearAllStack: true);
         navigateTo(context, TabHomePage.routeName, clearAllStack: true);
         return new Future(() => false);
       },
@@ -124,7 +126,13 @@ class _DynamicCartScreenState extends BaseState<DynamicCartScreen>
           backgroundColor: colorWhite,
           leading: InkWell(
               onTap: () {
+                _categoryScreenBloc.add(CartDeleteRequestCallEvent(
+                    CustomerID, CartDeleteRequest(CompanyID: CompanyID)));
+
+                getproductlistfromdbMethod();
                 navigateTo(context, TabHomePage.routeName, clearAllStack: true);
+
+                // navigateTo(context, TabHomePage.routeName, clearAllStack: true);
               },
               child: Icon(
                 Icons.keyboard_arrow_left,
@@ -150,12 +158,20 @@ class _DynamicCartScreenState extends BaseState<DynamicCartScreen>
                     onTapOfPositiveButton: () async {
                       Navigator.pop(context);
 
+                      baseBloc.emit(ShowProgressIndicatorState(true));
+
                       await OfflineDbHelper.getInstance().deleteContactTable();
+
+                      _categoryScreenBloc.add(CartDeleteRequestCallEvent(
+                          CustomerID, CartDeleteRequest(CompanyID: CompanyID)));
+
                       setState(() {
                         getproductlistfromdb.clear();
                         TotalAmount = 0.00;
                         //invisibleAfterDeleteAllTap = false;
                       });
+
+                      baseBloc.emit(ShowProgressIndicatorState(false));
                     },
                   );
                 },
@@ -244,6 +260,11 @@ class _DynamicCartScreenState extends BaseState<DynamicCartScreen>
   Widget _buildInquiryListItem(int index) {
     ProductCartModel productCartModel = getproductlistfromdb[index];
 
+    if (productCartModel.ProductImage.toString() ==
+        "http://122.169.111.101:306//productimages/no-figure.png") {
+      productCartModel.ProductImage = "";
+    }
+
     print('QTY4334' + productCartModel.ProductImage.toString());
     int ItemWiseQTY = 0;
     return Container(
@@ -314,7 +335,7 @@ class _DynamicCartScreenState extends BaseState<DynamicCartScreen>
                 // Image.asset(productCartModel.imagePath,width: 100,height: 100,),
 
                 Image.network(
-                  productCartModel.ProductImage,
+                  getproductlistfromdb[index].ProductImage,
                   frameBuilder:
                       (context, child, frame, wasSynchronouslyLoaded) {
                     return child;
@@ -330,8 +351,8 @@ class _DynamicCartScreenState extends BaseState<DynamicCartScreen>
                       StackTrace stackTrace) {
                     return Image.asset(
                       NO_IMAGE_FOUND,
-                      height: 100,
-                      width: 100,
+                      height: 80,
+                      width: 80,
                     );
                   },
                   width: 80,
@@ -344,10 +365,15 @@ class _DynamicCartScreenState extends BaseState<DynamicCartScreen>
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    AppText(
+                    /* AppText(
                       text: productCartModel.ProductName,
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
+                    ),*/
+                    Text(
+                      productCartModel.ProductName,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(color: Colors.black),
                     ),
                     SizedBox(
                       height: 5,
@@ -474,6 +500,7 @@ class _DynamicCartScreenState extends BaseState<DynamicCartScreen>
     if (getproductlistfromdb.isNotEmpty) {
       _categoryScreenBloc.add(CartDeleteRequestCallEvent(
           CustomerID, CartDeleteRequest(CompanyID: CompanyID)));
+      arrCartAPIList.clear();
 
       for (int i = 0; i < getproductlistfromdb.length; i++) {
         CartModel cartModel = CartModel();
@@ -495,10 +522,16 @@ class _DynamicCartScreenState extends BaseState<DynamicCartScreen>
         cartModel.ProductImage = getproductlistfromdb[i].ProductImage;
         // "http://122.169.111.101:206/productimages/no-figure.png"; //getproductlistfromdb[i].ProductImage;
 
+        print("ldkjkd" +
+            "ProductImage : " +
+            getproductlistfromdb[i].ProductImage);
+
         arrCartAPIList.add(cartModel);
       }
 
-      _categoryScreenBloc.add(InquiryProductSaveCallEvent(arrCartAPIList));
+      if (LoginUserID != "dummy") {
+        _categoryScreenBloc.add(InquiryProductSaveCallEvent(arrCartAPIList));
+      }
     }
 
     setState(() {});
@@ -514,10 +547,95 @@ class _DynamicCartScreenState extends BaseState<DynamicCartScreen>
         padding: EdgeInsets.symmetric(vertical: 20),
         // trailingWidget: getButtonPriceWidget(),
         onPressed: () {
-          showBottomSheet(context);
+          if (LoginUserID != "dummy") {
+            showBottomSheet(context);
+          } else {
+            navigateTo(context, LoginScreen.routeName, clearAllStack: true);
+          }
         },
       ),
     );
+  }
+
+  Widget commonalertbox(String msg,
+      {GestureTapCallback onTapofPositive, bool useRootNavigator = true}) {
+    showDialog(
+        context: context,
+        builder: (BuildContext ab) {
+          return AlertDialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(15),
+            ),
+            elevation: 10,
+            actions: [
+              SizedBox(
+                height: 20,
+              ),
+              Container(
+                margin: EdgeInsets.only(left: 30, right: 30),
+                height: 40,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(color: Getirblue, width: 2.00),
+                ),
+                alignment: Alignment.center,
+                child: Text(
+                  "Alert!",
+                  style: TextStyle(
+                    fontSize: 20,
+                    color: Getirblue,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 30,
+              ),
+              Container(
+                alignment: Alignment.center,
+                //margin: EdgeInsets.only(left: 10),
+                child: Text(
+                  msg,
+                  style: TextStyle(
+                    fontSize: 15,
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 30,
+              ),
+              Divider(
+                height: 1.00,
+                thickness: 2.00,
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              GestureDetector(
+                onTap: onTapofPositive ??
+                    () {
+                      Navigator.of(context, rootNavigator: useRootNavigator)
+                          .pop();
+                    },
+                child: Container(
+                  alignment: Alignment.center,
+                  child: Text(
+                    "Ok",
+                    style: TextStyle(
+                      fontSize: 20,
+                      color: Colors.black,
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+            ],
+          );
+        });
   }
 
   Widget getButtonPriceWidget() {

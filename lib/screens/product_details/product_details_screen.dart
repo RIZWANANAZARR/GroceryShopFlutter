@@ -4,15 +4,18 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:grocery_app/common_widgets/app_button.dart';
 import 'package:grocery_app/common_widgets/app_text.dart';
+import 'package:grocery_app/models/api_response/Customer/customer_login_response.dart';
 import 'package:grocery_app/models/database_models/db_product_cart_details.dart';
 import 'package:grocery_app/models/grocery_item.dart';
 import 'package:grocery_app/screens/cart/dynamic_cart_scree.dart';
+import 'package:grocery_app/screens/login/login_screen.dart';
 import 'package:grocery_app/screens/tabview_dashboard/tab_dasboard_screen.dart';
 import 'package:grocery_app/ui/color_resource.dart';
 import 'package:grocery_app/ui/image_resource.dart';
 import 'package:grocery_app/utils/common_widgets.dart';
 import 'package:grocery_app/utils/general_utils.dart';
 import 'package:grocery_app/utils/offline_db_helper.dart';
+import 'package:grocery_app/utils/shared_pref_helper.dart';
 import 'package:grocery_app/widgets/item_count_for_cart.dart';
 
 class ProductDetailsScreen extends StatefulWidget {
@@ -32,6 +35,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   bool isProductinCart = false;
   bool favorite = false;
   TextEditingController _amount = TextEditingController();
+  LoginResponse _offlineLogindetails;
+  String LoginUserID = "";
 
   @override
   void initState() {
@@ -42,6 +47,9 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
     _amount.text = "1";
     getproductlistfromdbMethod();
     getproductFavoritelistfromdbMethod();
+    _offlineLogindetails = SharedPrefHelper.instance.getLoginUserData();
+    LoginUserID =
+        _offlineLogindetails.details[0].customerName.trim().toString();
 
     print("sdjfjkf" + widget.groceryItem.ProductImage);
 
@@ -140,14 +148,19 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                       ),
                       trailing: /*FavoriteToggleIcon()*/ InkWell(
                         onTap: () {
-                          setState(() {
-                            favorite = !favorite;
-                            if (favorite == true) {
-                              _OnTaptoAddProductinCartFavorit();
-                            } else {
-                              _onTapOfDeleteContact();
-                            }
-                          });
+                          if (LoginUserID != "dummy") {
+                            setState(() {
+                              favorite = !favorite;
+                              if (favorite == true) {
+                                _OnTaptoAddProductinCartFavorit();
+                              } else {
+                                _onTapOfDeleteContact();
+                              }
+                            });
+                          } else {
+                            navigateTo(context, LoginScreen.routeName,
+                                clearAllStack: true);
+                          }
                         },
                         child: Icon(
                           favorite ? Icons.favorite : Icons.favorite_border,

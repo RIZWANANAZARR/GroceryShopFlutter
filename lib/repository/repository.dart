@@ -29,6 +29,7 @@ import 'package:grocery_app/models/api_request/ProductMasterRequest/product_imag
 import 'package:grocery_app/models/api_request/ProductMasterRequest/product_master_delete_request.dart';
 import 'package:grocery_app/models/api_request/ProductMasterRequest/product_master_save_request.dart';
 import 'package:grocery_app/models/api_request/ProductMasterRequest/product_pagination_request.dart';
+import 'package:grocery_app/models/api_request/ProductReporting/product_reporting_list_request.dart';
 import 'package:grocery_app/models/api_request/Profile/profile_delete_request.dart';
 import 'package:grocery_app/models/api_request/Profile/profile_list_request.dart';
 import 'package:grocery_app/models/api_request/Tab_List/tab_product_group_list_request.dart';
@@ -81,6 +82,7 @@ import 'package:grocery_app/models/api_response/ProductMasterResponse/product_im
 import 'package:grocery_app/models/api_response/ProductMasterResponse/product_image_save_response.dart';
 import 'package:grocery_app/models/api_response/ProductMasterResponse/product_master_save_response.dart';
 import 'package:grocery_app/models/api_response/ProductMasterResponse/product_pagination_response.dart';
+import 'package:grocery_app/models/api_response/ProductReporting/product_reporting_list_response.dart';
 import 'package:grocery_app/models/api_response/Profile/profile_delete_response.dart';
 import 'package:grocery_app/models/api_response/Profile/profile_list_response.dart';
 import 'package:grocery_app/models/api_response/Tab_List/tab_product_group_list_response.dart';
@@ -387,7 +389,7 @@ class Repository {
       int pageno, ProductPaginationRequest paginationRequest) async {
     try {
       Map<String, dynamic> json = await apiClient.apiCallPost(
-          '${ApiClient.END_POINT_Product_Master_Pagination}/$pageno-11',
+          '${ApiClient.END_POINT_Product_Master_Pagination}/$pageno-10000000',
           paginationRequest.toJson());
       ProductPaginationResponse response =
           ProductPaginationResponse.fromJson(json);
@@ -1023,6 +1025,20 @@ class Repository {
           inwardProductListRequest.toJson());
       InwardProductListResponse loginUserDetialsResponse =
           InwardProductListResponse.fromJson(json);
+      return loginUserDetialsResponse;
+    } on ErrorResponseException catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<ProductReportingListResponse> productreportingApi(
+      ProductReportingListRequest inwardProductListRequest) async {
+    try {
+      Map<String, dynamic> json = await apiClient.apiCallPost(
+          ApiClient.END_POINT_PRODUCT_REPORTING,
+          inwardProductListRequest.toJson());
+      ProductReportingListResponse loginUserDetialsResponse =
+          ProductReportingListResponse.fromJson(json);
       return loginUserDetialsResponse;
     } on ErrorResponseException catch (e) {
       rethrow;

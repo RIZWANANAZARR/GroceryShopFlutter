@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:grocery_app/screens/AdminRegistration/admin_registration_screen.dart';
 import 'package:grocery_app/screens/ExploreDashBoard/explore_dashboard_screen.dart';
+import 'package:grocery_app/screens/ProductReporting/product_reporting_list_screen.dart';
+import 'package:grocery_app/screens/ShopDashBoard/shopDashBoard.dart';
 import 'package:grocery_app/screens/Update_Profile/profile_list_screen.dart';
 import 'package:grocery_app/screens/Update_Profile/update_profile_screen.dart';
 import 'package:grocery_app/screens/account/about_us_screen.dart';
@@ -126,6 +128,9 @@ class MyApp extends StatelessWidget {
 
       case TabHomePage.routeName:
         return getMaterialPageRoute(TabHomePage());
+      case ShopDashBoard.routeName:
+        return getMaterialPageRoute(ShopDashBoard());
+
       /* case TabProductPage.routeName:
         return getMaterialPageRoute(TabHomePage(settings.arguments));*/
       case TabProductPage.routeName:
@@ -192,6 +197,8 @@ class MyApp extends StatelessWidget {
         return getMaterialPageRoute(SearchSmartCustomerScreen());
       case ChangePasswordScreen.routeName:
         return getMaterialPageRoute(ChangePasswordScreen());
+      case ProductReportingListScreen.routeName:
+        return getMaterialPageRoute(ProductReportingListScreen());
 
       default:
         return null;
@@ -226,6 +233,7 @@ class MyApp extends StatelessWidget {
       return SplashScreen.routeName;
     }*/
     if (SharedPrefHelper.instance.isLogIn()) {
+      /// return TabHomePage.routeName;
       return TabHomePage.routeName;
     } else if (SharedPrefHelper.instance.isRegisteredIn()) {
       return LoginScreen.routeName;

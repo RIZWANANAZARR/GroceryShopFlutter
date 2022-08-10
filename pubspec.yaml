@@ -66,6 +66,7 @@ flutter:
     - assets/images/beverages_images/
     - assets/icons/
     - assets/icons/account_icons/
+    - assets/icons/profile_icon/
     - assets/fonts/
     - assets/giffiles/
 

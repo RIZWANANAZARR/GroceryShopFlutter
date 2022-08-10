@@ -151,3 +151,10 @@ class LoginResponseState extends CategoryScreenStates {
 
   LoginResponseState(this.loginResponse);
 }
+
+
+class ProductReportingListResponseState extends CategoryScreenStates {
+  final ProductReportingListResponse productReportingListResponse;
+
+  ProductReportingListResponseState(this.productReportingListResponse);
+}

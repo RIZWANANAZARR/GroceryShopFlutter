@@ -218,7 +218,7 @@ class _ChangePasswordScreenState extends BaseState<ChangePasswordScreen>
           style: baseTheme.textTheme.headline1,
         ),*/
         Text(
-          "Change Password",
+          "Reset Password",
           style: TextStyle(
             color: Getirblue,
             fontSize: 48,
@@ -281,7 +281,7 @@ class _ChangePasswordScreenState extends BaseState<ChangePasswordScreen>
 
   Widget getButton(BuildContext context) {
     return AppButton(
-      label: "Update Password",
+      label: "Reset Password",
       fontWeight: FontWeight.w600,
       padding: EdgeInsets.symmetric(vertical: 25),
       onPressed: () {

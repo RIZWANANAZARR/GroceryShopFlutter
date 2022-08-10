@@ -265,7 +265,7 @@ class _SearchSmartCustomerScreenState
           1,
           true,
           ProfileListRequest(
-              CustomerType: _offlineLoggedInData.details[0].customerType,
+              CustomerType: "customer",
               SearchKey: value,
               CompanyId: CompanyID.toString(),
               LoginUserID: LoginUserID,

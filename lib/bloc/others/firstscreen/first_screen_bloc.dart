@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:grocery_app/bloc/base/base_bloc.dart';
+import 'package:grocery_app/models/api_request/CartList/cart_save_list.dart';
 import 'package:grocery_app/models/api_request/CartList/product_cart_list_request.dart';
+import 'package:grocery_app/models/api_request/CartListDelete/cart_delete_request.dart';
 import 'package:grocery_app/models/api_request/Customer/customer_forgot_request.dart';
 import 'package:grocery_app/models/api_request/Customer/customer_login_request.dart';
 import 'package:grocery_app/models/api_request/Customer/customer_registration_request.dart';
 import 'package:grocery_app/models/api_request/company_details_request.dart';
 import 'package:grocery_app/models/api_request/login_user_details_api_request.dart';
+import 'package:grocery_app/models/api_response/CartResponse/cart_delete_response.dart';
+import 'package:grocery_app/models/api_response/CartResponse/cart_save_response.dart';
 import 'package:grocery_app/models/api_response/CartResponse/product_cart_list_response.dart';
 import 'package:grocery_app/models/api_response/Customer/customer_forgot_respons.dart';
 import 'package:grocery_app/models/api_response/Customer/customer_login_response.dart';
@@ -53,6 +57,20 @@ class FirstScreenBloc extends Bloc<FirstScreenEvents, FirstScreenStates> {
 
     if (event is ProductCartDetailsRequestCallEvent) {
       yield* _mapProductCartDetailEventToState(event);
+    }
+
+    if (event is LoginProductCartDetailsRequestCallEvent) {
+      yield* _mapLoginProductCartDetailEventToState(event);
+    }
+
+    if (event is DummyLoginRequestCallEvent) {
+      yield* _mapDummyLoginCallEventToState(event);
+    }
+    if (event is CartDeleteRequestCallEvent) {
+      yield* _mapCartDeleteRequestEventToState(event);
+    }
+    if (event is InquiryProductSaveCallEvent) {
+      yield* _mapInquiryProductSaveEventToState(event);
     }
   }
 
@@ -159,6 +177,22 @@ class FirstScreenBloc extends Bloc<FirstScreenEvents, FirstScreenStates> {
     }
   }
 
+  Stream<FirstScreenStates> _mapDummyLoginCallEventToState(
+      DummyLoginRequestCallEvent event) async* {
+    try {
+      baseBloc.emit(ShowProgressIndicatorState(true));
+      //call your api as follows
+      LoginResponse companyDetailsResponse =
+          await userRepository.LoginAPI(event.loginRequest);
+      yield DummyLoginResponseState(companyDetailsResponse);
+    } catch (error, stacktrace) {
+      baseBloc.emit(ApiCallFailureState(error));
+      print(stacktrace);
+    } finally {
+      baseBloc.emit(ShowProgressIndicatorState(false));
+    }
+  }
+
   Stream<FirstScreenStates> _mapProductFavoriteDetailEventToState(
       ProductFavoriteDetailsRequestCallEvent event) async* {
     try {
@@ -188,6 +222,55 @@ class FirstScreenBloc extends Bloc<FirstScreenEvents, FirstScreenStates> {
     } catch (error, stacktrace) {
       baseBloc.emit(ApiCallFailureState(error));
       print("_mapBestSellingListEventToState " + "Msg : " + error.toString());
+    } finally {
+      baseBloc.emit(ShowProgressIndicatorState(false));
+    }
+  }
+
+  Stream<FirstScreenStates> _mapLoginProductCartDetailEventToState(
+      LoginProductCartDetailsRequestCallEvent event) async* {
+    try {
+      baseBloc.emit(ShowProgressIndicatorState(true));
+      //call your api as follows
+      ProductCartListResponse loginResponse =
+          await userRepository.ProductCartListAPI(
+              event.productCartDetailsRequest);
+      yield LoginProductCartResponseState(loginResponse);
+    } catch (error, stacktrace) {
+      baseBloc.emit(ApiCallFailureState(error));
+      print("_mapBestSellingListEventToState " + "Msg : " + error.toString());
+    } finally {
+      baseBloc.emit(ShowProgressIndicatorState(false));
+    }
+  }
+
+  Stream<FirstScreenStates> _mapCartDeleteRequestEventToState(
+      CartDeleteRequestCallEvent event) async* {
+    try {
+      baseBloc.emit(ShowProgressIndicatorState(true));
+      //call your api as follows
+      CartDeleteResponse loginResponse = await userRepository.CartDeleteAPI(
+          event.CustomerID, event.cartDeleteRequest);
+      yield CartDeleteResponseState(loginResponse);
+    } catch (error, stacktrace) {
+      baseBloc.emit(ApiCallFailureState(error));
+      print("_mapBestSellingListEventToState " + "Msg : " + error.toString());
+    } finally {
+      baseBloc.emit(ShowProgressIndicatorState(false));
+    }
+  }
+
+  Stream<FirstScreenStates> _mapInquiryProductSaveEventToState(
+      InquiryProductSaveCallEvent event) async* {
+    try {
+      baseBloc.emit(ShowProgressIndicatorState(true));
+
+      InquiryProductSaveResponse respo = await userRepository
+          .inquiryProductSaveDetails(event.inquiryProductModel);
+      yield InquiryProductSaveResponseState(respo);
+    } catch (error, stacktrace) {
+      baseBloc.emit(ApiCallFailureState(error));
+      print(stacktrace);
     } finally {
       baseBloc.emit(ShowProgressIndicatorState(false));
     }

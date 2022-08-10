@@ -60,6 +60,7 @@ class _FavoriteItemsScreenState extends BaseState<FavoriteItemsScreen>
   void deactivate() {
     // TODO: implement deactivate
     super.deactivate();
+
     getproductFavoritelistfromdbMethod();
   }
 
@@ -83,6 +84,7 @@ class _FavoriteItemsScreenState extends BaseState<FavoriteItemsScreen>
     baseBloc.emit(ShowProgressIndicatorState(true));
 
     getproductFavoritelistfromdbMethod();
+
     baseBloc.emit(ShowProgressIndicatorState(false));
   }
 
@@ -327,6 +329,8 @@ class _FavoriteItemsScreenState extends BaseState<FavoriteItemsScreen>
       MaterialPageRoute(
           builder: (context) => ProductDetailsScreen(groceryItem)),
     ).then((value) {
+      // getproductFavoritelistfromdbMethod();
+
       getproductFavoritelistfromdbMethod();
     });
 
@@ -399,9 +403,10 @@ class _FavoriteItemsScreenState extends BaseState<FavoriteItemsScreen>
 
         arrCartAPIList.add(cartModel);
       }
-
-      _categoryScreenBloc
-          .add(InquiryFavoriteProductSaveCallEvent(arrCartAPIList));
+      if (LoginUserID != "dummy") {
+        _categoryScreenBloc
+            .add(InquiryFavoriteProductSaveCallEvent(arrCartAPIList));
+      }
     }
 
     return AllProducts123;
@@ -452,6 +457,7 @@ class _FavoriteItemsScreenState extends BaseState<FavoriteItemsScreen>
     fToast.init(context);
 
     await OfflineDbHelper.getInstance().deleteContactFavorit(productID);
+
     getproductFavoritelistfromdbMethod();
 
     fToast.showToast(

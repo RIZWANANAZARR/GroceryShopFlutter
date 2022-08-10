@@ -218,9 +218,11 @@ class _CategoryItemsScreenState extends BaseState<CategoryItemsScreen>
       groceryItem.ComapanyID = CompanyID;
       groceryItem.ProductSpecification =
           state.response.details[i].productSpecification;
-      groceryItem.ProductImage = state.response.details[i].productImage == ""
+      groceryItem
+              .ProductImage = /*state.response.details[i].productImage == ""
           ? "https://img.icons8.com/bubbles/344/no-image.png"
-          : _offlineCompanydetails.details[0].siteURL +
+          : */
+          _offlineCompanydetails.details[0].siteURL +
               "/productimages/" +
               state.response.details[i].productImage;
       groceryItem.Vat = state.response.details[i].Vat;

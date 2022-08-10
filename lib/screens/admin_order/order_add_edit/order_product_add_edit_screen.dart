@@ -1228,48 +1228,79 @@ class _OrderProductAddEditState extends BaseState<OrderProductAddEdit>
                     SizedBox(
                       height: 10,
                     ),
-                    getCommonButton(baseTheme, () {
-                      if (DispatchQTY.text != "") {
-                        if (Remarks.text != "") {
-                          double qt = double.parse(OrderQty.text.toString());
-                          double oqt =
-                              double.parse(DispatchQTY.text.toString());
-                          print("sdjds" +
-                              "QT : " +
-                              qt.toString() +
-                              oqt.toString());
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          width: 100,
+                          margin: EdgeInsets.only(left: 20, right: 20),
+                          child: getCommonButton(
+                            baseTheme,
+                            () {
+                              if (DispatchQTY.text != "") {
+                                if (Remarks.text != "") {
+                                  double qt =
+                                      double.parse(OrderQty.text.toString());
+                                  double oqt =
+                                      double.parse(DispatchQTY.text.toString());
+                                  print("sdjds" +
+                                      "QT : " +
+                                      qt.toString() +
+                                      oqt.toString());
 
-                          if (finalCheckingItems.dispatchQuantity <=
-                              finalCheckingItems.ClosingSTK) {
-                            if (oqt <= qt) {
-                              setState(() {
-                                finalCheckingItems.dispatchQuantity =
-                                    double.parse(DispatchQTY.text);
-                                finalCheckingItems.Remarks = Remarks.text;
-                              });
-                              TotalAmountCalculation();
-                              Navigator.pop(context123);
-                            } else {
-                              commonalertbox(
-                                  "Dispatched Quantity Should Not Be Greater Than Order Quantity");
-                            }
-                          } else {
-                            commonalertbox(
-                                "Dispatched Quantity Should Not Be Greater Than to Closing Stock");
-                          }
+                                  if (finalCheckingItems.dispatchQuantity <=
+                                      finalCheckingItems.ClosingSTK) {
+                                    if (oqt <= qt) {
+                                      setState(() {
+                                        finalCheckingItems.dispatchQuantity =
+                                            double.parse(DispatchQTY.text);
+                                        finalCheckingItems.Remarks =
+                                            Remarks.text;
+                                      });
+                                      TotalAmountCalculation();
+                                      Navigator.pop(context123);
+                                    } else {
+                                      commonalertbox(
+                                          "Dispatched Quantity Should Not Be Greater Than Order Quantity");
+                                    }
+                                  } else {
+                                    commonalertbox(
+                                        "Dispatched Quantity Should Not Be Greater Than to Closing Stock");
+                                  }
 
-                          // _productList[index1].SerialNo = edt_Application.text;
+                                  // _productList[index1].SerialNo = edt_Application.text;
 
-                        } else {
-                          commonalertbox("Remarks should not Empty");
-                        }
-                      } else {
-                        commonalertbox("Dispatched Quantity should not Empty");
-                      }
-                    }, "Submit Details",
-                        backGroundColor: Getirblue,
-                        textColor: colorWhite,
-                        width: 200)
+                                } else {
+                                  commonalertbox("Remarks should not Empty");
+                                }
+                              } else {
+                                commonalertbox(
+                                    "Dispatched Quantity should not Empty");
+                              }
+                            },
+                            "Submit",
+                            backGroundColor: Getirblue,
+                            textColor: colorWhite,
+                          ),
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Container(
+                          width: 100,
+                          margin: EdgeInsets.only(left: 20, right: 20),
+                          child: getCommonButton(
+                            baseTheme,
+                            () {
+                              Navigator.pop(context);
+                            },
+                            "Close",
+                            backGroundColor: Getirblue,
+                            textColor: colorWhite,
+                          ),
+                        ),
+                      ],
+                    ),
                   ],
                 )),
           ],

@@ -1,11 +1,16 @@
+import 'dart:io';
+
+import 'package:badges/badges.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:grocery_app/bloc/others/category/category_bloc.dart';
 import 'package:grocery_app/models/Model_for_dropdown/Model_for_list.dart';
+import 'package:grocery_app/models/api_request/CartList/cart_save_list.dart';
 import 'package:grocery_app/models/api_request/CartList/product_cart_list_request.dart';
 import 'package:grocery_app/models/api_request/Customer/customer_login_request.dart';
 import 'package:grocery_app/models/api_request/Token/token_Save_request.dart';
@@ -24,9 +29,10 @@ import 'package:grocery_app/screens/base/base_screen.dart';
 import 'package:grocery_app/screens/cart/dynamic_cart_scree.dart';
 import 'package:grocery_app/screens/dashboard/navigator_item.dart';
 import 'package:grocery_app/screens/favorite/favorite_screen.dart';
-import 'package:grocery_app/screens/home/home_screen.dart';
+import 'package:grocery_app/screens/login/login_screen.dart';
 import 'package:grocery_app/screens/push_notification_model.dart';
 import 'package:grocery_app/screens/tabview_dashboard/Smart_Customer_Screen.dart';
+import 'package:grocery_app/screens/tabview_dashboard/tab_product_card_view.dart';
 import 'package:grocery_app/screens/tabview_dashboard/tab_product_details_screen.dart';
 import 'package:grocery_app/styles/colors.dart';
 import 'package:grocery_app/ui/color_resource.dart';
@@ -36,6 +42,7 @@ import 'package:grocery_app/utils/shared_pref_helper.dart';
 
 class TabHomePage extends BaseStatefulWidget {
   static const routeName = '/TabHomePage';
+  static int counter = 0;
 
   @override
   _TabHomePageState createState() => _TabHomePageState();
@@ -61,6 +68,8 @@ class _TabHomePageState extends BaseState<TabHomePage>
   List<GroceryItem> BestSellingProducts = [];
   PushNotificationService pushNotificationService = PushNotificationService();
   String token123 = "";
+  int cartCount = 0;
+  String notifyText = "";
 
   FirebaseMessaging _messaging;
 
@@ -184,6 +193,16 @@ class _TabHomePageState extends BaseState<TabHomePage>
 
   String TokenFinal = "";
   ProfileListResponseDetails _searchInquiryListResponse;
+  var provider;
+
+  GroceryItem groceryItem = GroceryItem();
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    setState(() {
+      cartCount = baseBloc.userRepository.prefs.getInt("Count");
+    });
+  }
 
   @override
   void initState() {
@@ -216,8 +235,18 @@ class _TabHomePageState extends BaseState<TabHomePage>
         LoginUserID: LoginUserID)));
     edt_CustomerName.text = "";
     /* */
+    getproductlistfromdbMethod();
+    print("djjdkjf" + " Counter : " + TabHomePage.counter.toString());
+    // cartCount = SharedPrefHelper.instance.getInt("CounterValue");
 
     getNavigationList(_offlineLogindetails.details[0].customerType);
+
+    getGrocery();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   @override
@@ -275,117 +304,174 @@ class _TabHomePageState extends BaseState<TabHomePage>
 
   @override
   Widget buildBody(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-          child: RefreshIndicator(
-              onRefresh: () async {
-                _categoryScreenBloc.add(ProductBrandCallEvent(
-                    ProductBrandListRequest(
-                        SearchKey: "",
-                        ActiveFlag: "1",
-                        CompanyId: CompanyID,
-                        LoginUserID: LoginUserID)));
-              },
-              child: CustomTabView(
-                initPosition: initPosition,
-                itemCount: data1.length,
-                tabBuilder: (context, index) => Tab(text: data1[index].Name),
-                pageBuilder: (context, index) => TabProductPage(
-                    AddTabProductScreenArguments(data1[index].id.toString())),
-                onPositionChange: (index) {
-                  print('current position: Brand ID : ' + data1[index].id);
-                  initPosition = index;
-                },
-                onScroll: (position) => print('$position'),
-              ))),
-      bottomNavigationBar: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.only(
-            topRight: Radius.circular(15),
-            topLeft: Radius.circular(15),
+    return WillPopScope(
+      onWillPop: _onBackpress,
+      child: Scaffold(
+        /* appBar: AppBar(
+          leading: Container(
+            margin: EdgeInsets.all(10),
+            child: Badge(
+              badgeContent: Text(cartCount.toString()),
+              child: SvgPicture.asset(
+                "assets/icons/cart_icon.svg",
+                color: AppColors.primaryColor,
+                width: 42,
+                height: 42,
+              ),
+            ),
           ),
-          boxShadow: [
-            BoxShadow(
-                color: Colors.black38.withOpacity(0.1),
-                spreadRadius: 0,
-                blurRadius: 37,
-                offset: Offset(0, -12)),
-          ],
-        ),
-        child: ClipRRect(
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(15),
-            topRight: Radius.circular(15),
+          backgroundColor: Colors.white,
+          elevation: 0,
+          centerTitle: true,
+          automaticallyImplyLeading: true,
+        ),*/
+        body: Container(
+            child: StatefulBuilder(builder: (ctx, StateSetter setState) {
+          return SafeArea(
+              child: RefreshIndicator(
+                  onRefresh: () async {
+                    _categoryScreenBloc.add(ProductBrandCallEvent(
+                        ProductBrandListRequest(
+                            SearchKey: "",
+                            ActiveFlag: "1",
+                            CompanyId: CompanyID,
+                            LoginUserID: LoginUserID)));
+                  },
+                  child: CustomTabView(
+                    initPosition: initPosition,
+                    itemCount: data1.length,
+                    tabBuilder: (context, index) =>
+                        Tab(text: data1[index].Name),
+                    pageBuilder: (context, index) => TabProductPage(
+                        AddTabProductScreenArguments(
+                            data1[index].id.toString())),
+                    onPositionChange: (index) {
+                      print('current position: Brand ID : ' + data1[index].id);
+                      initPosition = index;
+                    },
+                    onScroll: (position) => print('$position'),
+                  )));
+        })),
+        /*bottomNavigationBar: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.only(
+              topRight: Radius.circular(15),
+              topLeft: Radius.circular(15),
+            ),
+            boxShadow: [
+              BoxShadow(
+                  color: Colors.black38.withOpacity(0.1),
+                  spreadRadius: 0,
+                  blurRadius: 37,
+                  offset: Offset(0, -12)),
+            ],
           ),
-          child: BottomNavigationBar(
-            backgroundColor: Colors.white,
-            currentIndex: _selectedIndex,
-            onTap: (index) {
-              if (index == 0) {
-                navigateTo(context, TabHomePage.routeName, clearAllStack: true);
-              } else if (index == 1) {
-                navigateTo(context, ExploreDashBoardScreen.routeName,
-                    clearAllStack: true);
-              } else if (index == 2) {
-                navigateTo(context, DynamicCartScreen.routeName,
-                    clearAllStack: true);
-              } else if (index == 3) {
-                navigateTo(context, FavoriteItemsScreen.routeName,
-                    clearAllStack: true);
-              } else if (index == 4) {
-                if (_offlineLogindetails.details[0].customerType !=
-                    "customer") {
-                  navigateTo(context, OrderCustomerList.routeName,
+          child: ClipRRect(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(15),
+              topRight: Radius.circular(15),
+            ),
+            child: BottomNavigationBar(
+              backgroundColor: Colors.white,
+              currentIndex: _selectedIndex,
+              onTap: (index) {
+                if (index == 0) {
+                  navigateTo(context, TabHomePage.routeName,
                       clearAllStack: true);
-                } else {
+                } else if (index == 1) {
+                  navigateTo(context, ExploreDashBoardScreen.routeName,
+                      clearAllStack: true);
+                } else if (index == 2) {
+                  navigateTo(context, DynamicCartScreen.routeName,
+                      clearAllStack: true);
+                } else if (index == 3) {
+                  navigateTo(context, FavoriteItemsScreen.routeName,
+                      clearAllStack: true);
+                } else if (index == 4) {
+                  if (_offlineLogindetails.details[0].customerType !=
+                      "customer") {
+                    navigateTo(context, OrderCustomerList.routeName,
+                        clearAllStack: true);
+                  } else {
+                    navigateTo(context, AccountScreen.routeName,
+                        clearAllStack: true);
+                  }
+                } else if (index == 5) {
+
                   navigateTo(context, AccountScreen.routeName,
                       clearAllStack: true);
                 }
-              } else if (index == 5) {
-                /*navigateTo(context, OrderCustomerList.routeName,
-                    clearAllStack: true);*/
-                navigateTo(context, AccountScreen.routeName,
-                    clearAllStack: true);
-              }
-              print("SelectedIndex" + _selectedIndex.toString());
-            },
-            type: BottomNavigationBarType.fixed,
-            selectedItemColor: AppColors.primaryColor,
-            selectedLabelStyle: TextStyle(fontWeight: FontWeight.w600),
-            unselectedLabelStyle: TextStyle(fontWeight: FontWeight.w600),
-            unselectedItemColor: Colors.black,
-            items: navigatorItems123.map((e) {
-              return getNavigationBarItem(
-                  label: e.label, index: e.index, iconPath: e.iconPath);
-            }).toList(),
+                print("SelectedIndex" + _selectedIndex.toString());
+              },
+              type: BottomNavigationBarType.fixed,
+              selectedItemColor: AppColors.primaryColor,
+              selectedLabelStyle: TextStyle(fontWeight: FontWeight.w600),
+              unselectedLabelStyle: TextStyle(fontWeight: FontWeight.w600),
+              unselectedItemColor: Colors.black,
+              items: navigatorItems123.map((e) {
+                //  provider.counter = cartCount;
+
+                return getNavigationBarItem(
+                    label: e.label,
+                    index: e.index,
+                    iconPath: e.iconPath,
+                    count: cartCount,
+                    provif: provider);
+              }).toList(),
+            ),
           ),
-        ),
+        ),*/
+        floatingActionButton:
+            _offlineLogindetails.details[0].customerType != "customer"
+                ? Container(
+                    margin: EdgeInsets.only(bottom: 50),
+                    child: FloatingActionButton(
+                      child: InkWell(
+                          onTap: () {
+                            //_buildSearchView();
+                            _onTapOfSearchView();
+                          },
+                          child: Icon(Icons.people_alt)),
+                    ),
+                  )
+                : Container(
+                    child: Visibility(
+                      visible: false,
+                      child: TabProductItemCardWidget(
+                        itemm: groceryItem,
+                        ProductGroupID: "1",
+                        voidCallback: () {
+                          setState(() {
+                            return cartCount++;
+                          });
+                        },
+                      ),
+                    ),
+                  ),
       ),
-      floatingActionButton:
-          _offlineLogindetails.details[0].customerType != "customer"
-              ? FloatingActionButton(
-                  child: InkWell(
-                      onTap: () {
-                        //_buildSearchView();
-                        _onTapOfSearchView();
-                      },
-                      child: Icon(Icons.people_alt)),
-                )
-              : Container(),
     );
   }
 
   BottomNavigationBarItem getNavigationBarItem(
-      {String label, String iconPath, int index}) {
+      {String label, String iconPath, int index, int count, var provif}) {
     Color iconColor =
         index == _selectedIndex ? AppColors.primaryColor : Colors.black;
-
+    provif = count;
     return BottomNavigationBarItem(
       label: label,
-      icon: SvgPicture.asset(
-        iconPath,
-        color: iconColor,
-      ),
+      icon: label == "Cart"
+          ? Badge(
+              badgeContent: Text(count.toString()),
+              child: SvgPicture.asset(
+                iconPath,
+                color: iconColor,
+              ),
+            )
+          : SvgPicture.asset(
+              iconPath,
+              color: iconColor,
+            ),
+
       // activeIcon: badge
     );
   }
@@ -463,7 +549,8 @@ class _TabHomePageState extends BaseState<TabHomePage>
     });
   }
 
-  void _onLoginSucessResponse(LoginResponseState state, BuildContext context) {
+  void _onLoginSucessResponse(
+      LoginResponseState state, BuildContext context) async {
     print("LoginSucess" + state.loginResponse.details[0].emailAddress);
     String EmpName = state.loginResponse.details[0].customerName;
     if (EmpName != "") {
@@ -473,7 +560,8 @@ class _TabHomePageState extends BaseState<TabHomePage>
       _offlineCompanydetails = SharedPrefHelper.instance.getCompanyData();
       _offlineLogindetails = SharedPrefHelper.instance.getLoginUserData();
       // print("LoginAuthenticateSucess123" + "CompanyID : " + _offlineCompanyData.details[0].pkId.toString() +"LoginUserID : "+_offlineLoggedInDetailsData.details[0].userID);
-
+      await OfflineDbHelper.getInstance().deleteContactTable();
+      await OfflineDbHelper.getInstance().deleteContactTableFavorit();
       _categoryScreenBloc.add(ProductFavoriteDetailsRequestCallEvent(
           ProductCartDetailsRequest(
               CompanyId: _offlineCompanydetails.details[0].pkId.toString(),
@@ -537,6 +625,12 @@ class _TabHomePageState extends BaseState<TabHomePage>
       ProductCartResponseState state, BuildContext context) async {
     await OfflineDbHelper.getInstance().deleteContactTable();
     for (int i = 0; i < state.cartDeleteResponse.details.length; i++) {
+      print("TABDASHBOARD" +
+          " Product Name : " +
+          state.cartDeleteResponse.details[i].productName +
+          "QTY : " +
+          state.cartDeleteResponse.details[i].quantity.toString());
+
       String name = state.cartDeleteResponse.details[i].productName;
       String Alias = state.cartDeleteResponse.details[i].productName;
       int ProductID = state.cartDeleteResponse.details[i].productID;
@@ -665,16 +759,29 @@ class _TabHomePageState extends BaseState<TabHomePage>
   }
 
   void getNavigationList(String CustomerType) {
+    /*AddTabProductItemsScreenArguments addTabProductItemsScreenArguments =
+        AddTabProductItemsScreenArguments("1", "2");
+
+    TabProductItemsScreen(
+      addTabProductItemsScreenArguments,
+      funCallback: () {
+        setState(() {
+          cartCount++;
+        });
+      },
+    );*/
+
     navigatorItems123.clear();
     List<NavigatorItem> navigatorItems12 = [];
 
     if (CustomerType != "customer") {
       navigatorItems12 = [
-        NavigatorItem("Shop", "assets/icons/shop_icon.svg", 0, HomeScreen()),
+        NavigatorItem("Shop", "assets/icons/shop_icon.svg", 0, TabHomePage()),
         NavigatorItem("Explore", "assets/icons/explore_icon.svg", 1,
             ExploreDashBoardScreen()),
         NavigatorItem("Cart", "assets/icons/cart_icon.svg", 2,
-            /*CartScreen()*/ DynamicCartScreen()),
+            /*CartScreen()*/ DynamicCartScreen(),
+            count: 2),
         NavigatorItem("Favourite", "assets/icons/favourite_icon.svg", 3,
             FavoriteItemsScreen()),
         NavigatorItem("Order", "assets/icons/account_icons/orders_icon.svg", 4,
@@ -684,11 +791,12 @@ class _TabHomePageState extends BaseState<TabHomePage>
       ];
     } else {
       navigatorItems12 = [
-        NavigatorItem("Shop", "assets/icons/shop_icon.svg", 0, HomeScreen()),
+        NavigatorItem("Shop", "assets/icons/shop_icon.svg", 0, TabHomePage()),
         NavigatorItem("Explore", "assets/icons/explore_icon.svg", 1,
             ExploreDashBoardScreen()),
         NavigatorItem("Cart", "assets/icons/cart_icon.svg", 2,
-            /*CartScreen()*/ DynamicCartScreen()),
+            /*CartScreen()*/ DynamicCartScreen(),
+            count: cartCount),
         NavigatorItem("Favourite", "assets/icons/favourite_icon.svg", 3,
             FavoriteItemsScreen()),
         NavigatorItem(
@@ -697,6 +805,47 @@ class _TabHomePageState extends BaseState<TabHomePage>
     }
 
     navigatorItems123.addAll(navigatorItems12);
+  }
+
+  Future<bool> _onBackpress() {
+    /*_categoryScreenBloc.add(ProductBrandCallEvent(ProductBrandListRequest(
+        SearchKey: "",
+        ActiveFlag: "1",
+        CompanyId: CompanyID,
+        LoginUserID: LoginUserID)));*/
+    // navigateTo(context, TabHomePage.routeName, clearAllStack: true);
+    if (Platform.isAndroid) {
+      SystemNavigator.pop();
+    } else if (Platform.isIOS) {
+      exit(0);
+    }
+    return Future.value(false);
+  }
+
+  getproductlistfromdbMethod() async {
+    await getproductductdetails();
+  }
+
+  Future<void> getproductductdetails() async {
+    List<ProductCartModel> Tempgetproductlistfromdb =
+        await OfflineDbHelper.getInstance().getProductCartList();
+    cartCount = Tempgetproductlistfromdb.length;
+  }
+
+  void getGrocery() {
+    groceryItem.ProductName = "dummy";
+    groceryItem.ProductID = 1;
+    groceryItem.ProductAlias = "test";
+    groceryItem.CustomerID = 1;
+    groceryItem.Unit = "KG";
+    groceryItem.UnitPrice = 1.00;
+    groceryItem.Quantity = 0.00;
+    groceryItem.DiscountPer = 1.0;
+    groceryItem.LoginUserID = LoginUserID;
+    groceryItem.ComapanyID = CompanyID;
+    groceryItem.ProductSpecification = "djkfjd";
+    groceryItem.ProductImage = "";
+    groceryItem.Vat = 0.00;
   }
 }
 
@@ -807,33 +956,89 @@ class _CustomTabsState extends State<CustomTabView>
             padding: EdgeInsets.only(top: 10, bottom: 5),
             decoration: BoxDecoration(color: Getirblue),
             alignment: Alignment.center,
-            child: Column(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                TabBar(
-                  /*indicator: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(10.0)),*/
-                  //labelColor: Getirblue,
-                  //unselectedLabelColor: Colors.white,
-                  isScrollable: true,
-                  controller: controller,
-                  labelColor: Colors.white,
-                  labelStyle: TextStyle(fontWeight: FontWeight.bold),
+                Expanded(
+                  flex: 5,
+                  child: Container(
+                    margin: EdgeInsets.only(left: 10),
+                    alignment: Alignment.center,
+                    child: TabBar(
+                      /*indicator: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(10.0)),*/
+                      //labelColor: Getirblue,
+                      //unselectedLabelColor: Colors.white,
+                      isScrollable: true,
+                      controller: controller,
+                      labelColor: Colors.white,
+                      labelStyle: TextStyle(fontWeight: FontWeight.bold),
 
-                  unselectedLabelColor: Colors.white70,
-                  indicator: BoxDecoration(
-                    border: Border(
-                      bottom: BorderSide(
-                        color: GetirYellow,
-                        width: 3,
+                      unselectedLabelColor: Colors.white70,
+                      indicator: BoxDecoration(
+                        border: Border(
+                          bottom: BorderSide(
+                            color: GetirYellow,
+                            width: 3,
+                          ),
+                        ),
+                      ),
+                      tabs: List.generate(
+                        widget.itemCount,
+                        (index) => widget.tabBuilder(context, index),
                       ),
                     ),
                   ),
-                  tabs: List.generate(
-                    widget.itemCount,
-                    (index) => widget.tabBuilder(context, index),
-                  ),
                 ),
+                Expanded(
+                  flex: 1,
+                  child: Container(
+                    margin: EdgeInsets.only(right: 10, left: 20),
+                    alignment: Alignment.centerRight,
+                    child: Column(children: [
+                      GestureDetector(
+                        onTap: () async {
+                          String USERName = SharedPrefHelper.instance
+                              .getLoginUserData()
+                              .details[0]
+                              .customerName
+                              .toString()
+                              .trim();
+                          if (USERName == "dummy") {
+                            await SharedPrefHelper.instance.putBool(
+                                SharedPrefHelper.IS_LOGGED_IN_DATA, false);
+                            navigateTo(context, LoginScreen.routeName,
+                                clearAllStack: true);
+                          } else {
+                            showCommonDialogWithTwoOptions(
+                              context,
+                              "Are you sure you want to log out?",
+                              negativeButtonTitle: "No",
+                              positiveButtonTitle: "Yes",
+                              onTapOfPositiveButton: () async {
+                                Navigator.pop(context);
+                                //  FillProductCartDetails();
+
+                                SharedPrefHelper.instance.putBool(
+                                    SharedPrefHelper.IS_LOGGED_IN_DATA, false);
+                                /*await OfflineDbHelper.getInstance()
+                                    .deleteContactTable();*/
+
+                                navigateTo(context, LoginScreen.routeName,
+                                    clearAllStack: true);
+                              },
+                            );
+                          }
+                        },
+                        child: Icon(
+                          Icons.logout,
+                          color: colorWhite,
+                        ),
+                      ),
+                    ]),
+                  ),
+                )
               ],
             )),
         Expanded(
@@ -861,6 +1066,65 @@ class _CustomTabsState extends State<CustomTabView>
   onScroll() {
     if (widget.onScroll is ValueChanged<double>) {
       widget.onScroll(controller.animation.value);
+    }
+  }
+
+  void FillProductCartDetails() async {
+    await FillProductCartDetailswithasync();
+  }
+
+  Future<void> FillProductCartDetailswithasync() async {
+    List<ProductCartModel> getproductlistfromdb = [];
+    List<CartModel> arrCartAPIList = [];
+    LoginResponse _offlineLogindetails;
+    CompanyDetailsResponse _offlineCompanydetails;
+    _offlineLogindetails = SharedPrefHelper.instance.getLoginUserData();
+    _offlineCompanydetails = SharedPrefHelper.instance.getCompanyData();
+    String CustomerID = _offlineLogindetails.details[0].customerID.toString();
+    String CompanyID = _offlineCompanydetails.details[0].pkId.toString();
+    List<ProductCartModel> Tempgetproductlistfromdb =
+        await OfflineDbHelper.getInstance().getProductCartList();
+    getproductlistfromdb.addAll(Tempgetproductlistfromdb);
+
+    if (getproductlistfromdb.isNotEmpty) {
+/*      _categoryScreenBloc.add(CartDeleteRequestCallEvent(
+          _offlineLogindetails.details[0].customerID,
+          CartDeleteRequest(CompanyID: CompanyID)));*/
+      arrCartAPIList.clear();
+
+      for (int i = 0; i < getproductlistfromdb.length; i++) {
+        CartModel cartModel = CartModel();
+        cartModel.ProductName = getproductlistfromdb[i].ProductName;
+        cartModel.ProductAlias = getproductlistfromdb[i].ProductAlias;
+        cartModel.ProductID = getproductlistfromdb[i].ProductID;
+        cartModel.CustomerID = _offlineLogindetails.details[0].customerID;
+        cartModel.Unit = getproductlistfromdb[i].Unit;
+        cartModel.UnitPrice = getproductlistfromdb[i].UnitPrice;
+        cartModel.Quantity = getproductlistfromdb[i].Quantity.toDouble();
+        cartModel.DiscountPercent =
+            getproductlistfromdb[i].DiscountPercent == null
+                ? 0.00
+                : getproductlistfromdb[i].DiscountPercent;
+        cartModel.LoginUserID = getproductlistfromdb[i].LoginUserID;
+        cartModel.CompanyId = CompanyID;
+        cartModel.ProductSpecification =
+            getproductlistfromdb[i].ProductSpecification;
+        cartModel.ProductImage = getproductlistfromdb[i].ProductImage;
+        // "http://122.169.111.101:206/productimages/no-figure.png"; //getproductlistfromdb[i].ProductImage;
+
+        print("ldkjkd" +
+            "ProductImage : " +
+            getproductlistfromdb[i].ProductImage);
+
+        arrCartAPIList.add(cartModel);
+      }
+      // _categoryScreenBloc.add(InquiryProductSaveCallEvent(arrCartAPIList));
+    } else {
+      SharedPrefHelper.instance
+          .putBool(SharedPrefHelper.IS_LOGGED_IN_DATA, false);
+      OfflineDbHelper.getInstance().deleteContactTable();
+
+      navigateTo(context, LoginScreen.routeName, clearAllStack: true);
     }
   }
 }

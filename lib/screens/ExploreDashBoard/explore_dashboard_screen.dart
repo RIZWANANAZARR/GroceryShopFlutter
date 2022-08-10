@@ -270,9 +270,11 @@ class _ExploreDashBoardScreenState extends BaseState<ExploreDashBoardScreen>
       groceryItem.name = state.response.details[i].brandName;
       groceryItem.id = state.response.details[i].pkID;
 
-      groceryItem.imagePath = state.response.details[i].brandImage == ""
+      groceryItem
+              .imagePath = /*state.response.details[i].brandImage == ""
           ? "https://img.icons8.com/bubbles/344/no-image.png"
-          : _offlineCompanydetails.details[0].siteURL +
+          :*/
+          _offlineCompanydetails.details[0].siteURL +
               "/productbrandimages/" +
               state.response.details[i].brandImage;
 

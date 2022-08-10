@@ -10,6 +10,7 @@ import 'package:grocery_app/models/api_request/Customer/customer_login_request.d
 import 'package:grocery_app/models/api_request/Exclusive_Offer/exclusive_offer_list_request.dart';
 import 'package:grocery_app/models/api_request/Place_order/place_order_delete_request.dart';
 import 'package:grocery_app/models/api_request/ProductGroup/product_group_list_request.dart';
+import 'package:grocery_app/models/api_request/ProductReporting/product_reporting_list_request.dart';
 import 'package:grocery_app/models/api_request/Profile/profile_delete_request.dart';
 import 'package:grocery_app/models/api_request/Profile/profile_list_request.dart';
 import 'package:grocery_app/models/api_request/Tab_List/tab_product_group_list_request.dart';
@@ -29,6 +30,7 @@ import 'package:grocery_app/models/api_response/Category/category_list_response.
 import 'package:grocery_app/models/api_response/Customer/customer_login_response.dart';
 import 'package:grocery_app/models/api_response/Exclusive_Offer/exclusive_offer_list_response.dart';
 import 'package:grocery_app/models/api_response/ProductGroup/product_group_list_response.dart';
+import 'package:grocery_app/models/api_response/ProductReporting/product_reporting_list_response.dart';
 import 'package:grocery_app/models/api_response/Profile/profile_delete_response.dart';
 import 'package:grocery_app/models/api_response/Profile/profile_list_response.dart';
 import 'package:grocery_app/models/api_response/Tab_List/tab_product_group_list_response.dart';
@@ -152,6 +154,11 @@ class CategoryScreenBloc
     if (event is LoginRequestCallEvent) {
       yield* _mapLoginCallEventToState(event);
     }
+    if (event is ProductReportingListRequestCallEvent) {
+      yield* _mapProductReportingListRequestCallEventState(event);
+    }
+
+    //
     //ProfileListRequestCallEvent
   }
 
@@ -559,14 +566,13 @@ class CategoryScreenBloc
     }
   }
 
-
   Stream<CategoryScreenStates> _mapLoginCallEventToState(
       LoginRequestCallEvent event) async* {
     try {
       baseBloc.emit(ShowProgressIndicatorState(true));
       //call your api as follows
       LoginResponse companyDetailsResponse =
-      await userRepository.LoginAPI(event.loginRequest);
+          await userRepository.LoginAPI(event.loginRequest);
       yield LoginResponseState(companyDetailsResponse);
     } catch (error, stacktrace) {
       baseBloc.emit(ApiCallFailureState(error));
@@ -576,4 +582,19 @@ class CategoryScreenBloc
     }
   }
 
+  Stream<CategoryScreenStates> _mapProductReportingListRequestCallEventState(
+      ProductReportingListRequestCallEvent event) async* {
+    try {
+      baseBloc.emit(ShowProgressIndicatorState(true));
+      //call your api as follows
+      ProductReportingListResponse companyDetailsResponse = await userRepository
+          .productreportingApi(event.productReportingListRequest);
+      yield ProductReportingListResponseState(companyDetailsResponse);
+    } catch (error, stacktrace) {
+      baseBloc.emit(ApiCallFailureState(error));
+      print(stacktrace);
+    } finally {
+      baseBloc.emit(ShowProgressIndicatorState(false));
+    }
+  }
 }

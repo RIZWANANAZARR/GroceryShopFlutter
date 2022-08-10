@@ -35,3 +35,6 @@ const ListSearchNotFound = "assets/giffiles/listsearch.gif";
 const LogiPageLogo = "assets/images/Loginpagelogo.jpeg";
 const DispatchPNG = "assets/giffiles/dipatch.png";
 const NO_IMAGE_FOUND = "assets/images/noimage.png";
+const LOGOUT_ONE = "assets/images/logout_one.png";
+const LOGOUT_TWO = "assets/images/logout_two.png";
+const NO_INTERNET_PNG = "assets/images/no_internet_stock.png";

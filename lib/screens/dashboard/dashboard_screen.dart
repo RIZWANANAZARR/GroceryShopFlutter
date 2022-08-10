@@ -1,9 +1,6 @@
-import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:grocery_app/styles/colors.dart';
-
-import 'navigator_item.dart';
 
 class DashboardScreen extends StatefulWidget {
   static const routeName = '/DashboardScreen';
@@ -18,7 +15,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: navigatorItems[currentIndex].screen,
+      body: Container(), //navigatorItems[currentIndex].screen,
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.only(
@@ -51,10 +48,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
             selectedLabelStyle: TextStyle(fontWeight: FontWeight.w600),
             unselectedLabelStyle: TextStyle(fontWeight: FontWeight.w600),
             unselectedItemColor: Colors.black,
-            items: navigatorItems.map((e) {
-              return getNavigationBarItem(
-                  label: e.label, index: e.index, iconPath: e.iconPath);
-            }).toList(),
           ),
         ),
       ),
@@ -66,18 +59,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
     Color iconColor =
         index == currentIndex ? AppColors.primaryColor : Colors.black;
 
-
-        return BottomNavigationBarItem(
-          label: label,
-          icon: SvgPicture.asset(
-            iconPath,
-            color: iconColor,
-          ),
-         // activeIcon: badge
-        );
-
-
-
-
+    return BottomNavigationBarItem(
+      label: label,
+      icon: SvgPicture.asset(
+        iconPath,
+        color: iconColor,
+      ),
+      // activeIcon: badge
+    );
   }
 }

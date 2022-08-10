@@ -129,6 +129,49 @@ class OfflineDbHelper {
     );
   }
 
+  Future<List<ProductCartModel>> updateduplicate() async {
+    final db = await database;
+
+    final List<Map<String, dynamic>> maps = await db.rawQuery(
+        'Select ProductID, ProductName, ProductAlias, CustomerID, Unit , DiscountPercent, LoginUserID, CompanyId, ProductSpecification, ProductImage, vat, UnitPrice , Sum(Quantity) As Quantity  From $TABLE_PRODUCT_CART Group By ProductID, ProductName');
+
+    /* final List<Map<String, dynamic>> maps = await db.rawQuery(
+        'Select ProductID, ProductName, ProductAlias, CustomerID, Unit , DiscountPercent, LoginUserID, CompanyId, ProductSpecification, ProductImage, vat, Sum(UnitPrice) As UnitPrice , Sum(Quantity) As Quantity  From $TABLE_PRODUCT_CART Group By ProductID, ProductName');
+*/
+    return List.generate(maps.length, (i) {
+      /* int id;
+  String ProductName;
+  String ProductAlias;
+  int ProductID;
+  int CustomerID;
+  String Unit;
+  double UnitPrice;
+  double Quantity;
+  double DiscountPer;
+  String LoginUserID;
+  String ComapanyID;
+  String ProductSpecification;
+  String ProductImage;*/
+
+      return ProductCartModel(
+        maps[i]['ProductName'],
+        maps[i]['ProductAlias'],
+        maps[i]['ProductID'],
+        maps[i]['CustomerID'],
+        maps[i]['Unit'],
+        maps[i]['UnitPrice'],
+        maps[i]['Quantity'],
+        maps[i]['DiscountPercent'],
+        maps[i]['LoginUserID'],
+        maps[i]['CompanyId'],
+        maps[i]['ProductSpecification'],
+        maps[i]['ProductImage'],
+        maps[i]['vat'],
+        id: maps[i]['id'],
+      );
+    });
+  }
+
   Future<void> deleteContact(int id) async {
     final db = await database;
 

@@ -17,18 +17,31 @@ import 'package:grocery_app/utils/shared_pref_helper.dart';
 import 'package:grocery_app/widgets/item_count_for_cart.dart';
 
 class TabProductItemCardWidget extends StatefulWidget {
-  final GroceryItem _item;
-  final String _ProductGroupID;
-  TabProductItemCardWidget(this._item, this._ProductGroupID);
+  final GroceryItem itemm;
+  final String ProductGroupID;
+  final VoidCallback voidCallback;
+  final Function(int) onCountChanged;
+
+  TabProductItemCardWidget(
+      {this.itemm,
+      this.ProductGroupID,
+      this.voidCallback,
+      this.onCountChanged});
+
+  // method() => createState().methodInPage2();
 
   @override
   _TabProductItemCardWidgetState createState() =>
-      _TabProductItemCardWidgetState();
+      _TabProductItemCardWidgetState(
+          voidCallback: voidCallback, onCountChanged: onCountChanged);
 }
 
 class _TabProductItemCardWidgetState extends State<TabProductItemCardWidget> {
-//class TabProductItemCardWidget extends StatelessWidget {
-  // TabProductItemCardWidget({Key key, this.item}) : super(key: key);
+  final VoidCallback voidCallback;
+  final Function(int) onCountChanged;
+
+  _TabProductItemCardWidgetState({this.voidCallback, this.onCountChanged});
+
   int amount = 1;
   bool isProductinCart = false;
   FToast fToast;
@@ -66,9 +79,9 @@ class _TabProductItemCardWidgetState extends State<TabProductItemCardWidget> {
     CompanyID = _offlineCompanydetails.details[0].pkId.toString();
     getproductlistfromdbMethod();
     getproductFavoritelistfromdbMethod();
-    print("ddjfjsfji898ere" + widget._item.ProductImage.toString());
+    print("ddjfjsfji898ere" + widget.itemm.ProductImage.toString());
 
-    _amount.text = "\£" + widget._item.UnitPrice.toStringAsFixed(2);
+    _amount.text = "\£" + widget.itemm.UnitPrice.toStringAsFixed(2);
   }
 
   getproductlistfromdbMethod() async {
@@ -80,7 +93,7 @@ class _TabProductItemCardWidgetState extends State<TabProductItemCardWidget> {
     List<ProductCartModel> groceryItemdb =
         await OfflineDbHelper.getInstance().getProductCartList();
     for (int i = 0; i < groceryItemdb.length; i++) {
-      if (groceryItemdb[i].ProductID == widget._item.ProductID) {
+      if (groceryItemdb[i].ProductID == widget.itemm.ProductID) {
         amount = groceryItemdb[i].Quantity.toInt();
         getTotalPrice().toStringAsFixed(2);
         isProductinCart = true;
@@ -93,7 +106,7 @@ class _TabProductItemCardWidgetState extends State<TabProductItemCardWidget> {
           isProductinCart.toString() +
           " DBPRID " +
           groceryItemdb[i].ProductID.toString() +
-          widget._item.ProductID.toString());
+          widget.itemm.ProductID.toString());
     }
 
     setState(() {});
@@ -105,52 +118,21 @@ class _TabProductItemCardWidgetState extends State<TabProductItemCardWidget> {
       width: width,
       height: height,
       padding: EdgeInsets.all(5),
-      /*decoration: BoxDecoration(
-        border: Border.all(
-          color: borderColor,
-        ),
-        borderRadius: BorderRadius.circular(
-          borderRadius,
-        ),
-      ),*/
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          //   Positioned(right: 0.00, top: 0.00, child: addWidget()),
           Center(
             child: InkWell(
                 onTap: () {
-                  // _bottomsheetcontroller.close;
-                  // _bottomsheetcontroller.close();
-
                   if (SharedPrefHelper.instance.getBool("opendialog") ==
                       false) {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
                           builder: (context) =>
-                              ProductDetailsScreen(widget._item)),
+                              ProductDetailsScreen(widget.itemm)),
                     );
                   }
-
-                  /* if (_bottomsheetcontroller == null) {
-
-                  }
-*/
-                  // Navigator.pop(bootomsheetContext);
-                  /* Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) =>
-                            ProductDetailsScreen(widget._item)),
-                  );*/
-
-                  /*Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) =>
-                            ProductDetailsScreen(widget._item)),
-                  );*/
                 },
                 child: Container(
                   height: 100,
@@ -161,13 +143,9 @@ class _TabProductItemCardWidgetState extends State<TabProductItemCardWidget> {
                     border: Border.all(
                       color: borderColor,
                     ),
-                    /*  gradient: LinearGradient(begin: Alignment.bottomRight, colors: [
-                Colors.black.withOpacity(.8),
-                Colors.black.withOpacity(.0),
-              ])*/
                   ),
                   child: Image.network(
-                    widget._item.ProductImage,
+                    widget.itemm.ProductImage,
                     frameBuilder:
                         (context, child, frame, wasSynchronouslyLoaded) {
                       return child;
@@ -190,7 +168,7 @@ class _TabProductItemCardWidgetState extends State<TabProductItemCardWidget> {
             height: 10,
           ),
           AppText(
-            text: widget._item.ProductName.toUpperCase(),
+            text: widget.itemm.ProductName.toUpperCase(),
             fontSize: 10,
             color: Colors.black,
           ),
@@ -198,42 +176,20 @@ class _TabProductItemCardWidgetState extends State<TabProductItemCardWidget> {
             height: 5,
           ),
           AppText(
-            text: "Price \£${widget._item.UnitPrice.toStringAsFixed(2)}",
+            text: "Price \£${widget.itemm.UnitPrice.toStringAsFixed(2)}",
             fontSize: 10,
             fontWeight: FontWeight.bold,
           ),
           SizedBox(
             height: 5,
           ),
-
-          /* Text(
-              "\£${((widget._item.UnitPrice * widget._item.DiscountPer) / 100) + widget._item.UnitPrice}",
-              style: TextStyle(
-                  decoration: TextDecoration.lineThrough, fontSize: 8)),*/
-          /* Text("${widget._item.DiscountPer}\% off",
-              style: TextStyle(fontSize: 10)),*/
-
           Column(
             children: [
               SizedBox(
                 height: 5,
               ),
-              /*ItemCounterWidget(
-                      onAmountChanged: (newAmount) {
-                        setState(() {
-                          amount = newAmount;
-                        });
-                      },
-                    ),
-                    SizedBox(
-                      height: 5,
-                    ),*/
               GestureDetector(
                 onTap: () {
-                  /*isProductinCart == true
-                      ? navigateTo(context, DynamicCartScreen.routeName,
-                          clearAllStack: true)
-                      : _OnTaptoAddProductinCart();*/
                   setState(() {
                     isAdd = true;
                     isopendilaog = true;
@@ -273,12 +229,10 @@ class _TabProductItemCardWidgetState extends State<TabProductItemCardWidget> {
                                             ListTile(
                                               contentPadding: EdgeInsets.zero,
                                               title: AppText(
-                                                text: widget._item.ProductName,
+                                                text: widget.itemm.ProductName,
                                                 fontSize: 15,
                                                 fontWeight: FontWeight.bold,
                                                 color: Getirblue,
-                                                /* style: TextStyle(
-                                  fontSize: 24, fontWeight: FontWeight.bold),*/
                                               ),
                                               trailing: InkWell(
                                                   onTap: () {
@@ -286,14 +240,6 @@ class _TabProductItemCardWidgetState extends State<TabProductItemCardWidget> {
                                                         .putBool("opendialog",
                                                             false);
                                                     Navigator.pop(context);
-                                                    /* setState(() {
-                                                      favorite = !favorite;
-                                                      if (favorite == true) {
-                                                        _OnTaptoAddProductinCartFavorit();
-                                                      } else {
-                                                        _onTapOfDeleteContact();
-                                                      }
-                                                    });*/
                                                   },
                                                   child: Container(
                                                     height: 40,
@@ -314,11 +260,9 @@ class _TabProductItemCardWidgetState extends State<TabProductItemCardWidget> {
                                                       ),
                                                     ),
                                                   )),
-                                              /* FavoriteToggleIcon(
-                                                          widget._item)),*/
                                               subtitle: AppText(
                                                 text: widget
-                                                    ._item.ProductSpecification,
+                                                    .itemm.ProductSpecification,
                                                 fontSize: 10,
                                                 fontWeight: FontWeight.w600,
                                                 color: Getirblue,
@@ -327,13 +271,6 @@ class _TabProductItemCardWidgetState extends State<TabProductItemCardWidget> {
                                             // Spacer(),
                                             Row(
                                               children: [
-                                                /* ItemCounterWidget(
-                                onAmountChanged: (newAmount) {
-                                  setState(() {
-                                    amount = newAmount;
-                                  });
-                                },
-                              ),*/
                                                 ItemCounterWidgetForCart(
                                                   onAmountChanged:
                                                       (newAmount) async {
@@ -352,14 +289,7 @@ class _TabProductItemCardWidgetState extends State<TabProductItemCardWidget> {
                                                 SizedBox(
                                                   width: 20,
                                                 ),
-                                                /*Text(
-                                                  "\£${getTotalPrice().toStringAsFixed(2)}",
-                                                  style: TextStyle(
-                                                    fontSize: 15,
-                                                    fontWeight: FontWeight.bold,
-                                                    color: Getirblue,
-                                                  ),
-                                                )*/
+
                                                 Expanded(
                                                   child: TextField(
                                                     enabled: false,
@@ -368,9 +298,6 @@ class _TabProductItemCardWidgetState extends State<TabProductItemCardWidget> {
                                                         TextInputAction.next,
                                                     keyboardType:
                                                         TextInputType.text,
-                                                    //enabled: false,
-
-                                                    //onSubmitted: (_) => FocusScope.of(context).requestFocus(myFocusNode),
                                                     decoration: InputDecoration(
                                                       labelStyle: TextStyle(
                                                         color: Getirblue,
@@ -412,15 +339,7 @@ class _TabProductItemCardWidgetState extends State<TabProductItemCardWidget> {
                                                     SharedPrefHelper.instance
                                                         .putBool("opendialog",
                                                             false);
-
                                                     _OnTaptoAddProductinCart();
-                                                    /*isProductinCart == true
-                                                        ? navigateTo(
-                                                            context,
-                                                            DynamicCartScreen
-                                                                .routeName,
-                                                            clearAllStack: true)
-                                                        : _OnTaptoAddProductinCart();*/
                                                   },
                                                   child: Center(
                                                     child: Container(
@@ -435,10 +354,6 @@ class _TabProductItemCardWidgetState extends State<TabProductItemCardWidget> {
                                                       child: Center(
                                                         child: Text(
                                                           "Add to Cart",
-                                                          /*isProductinCart ==
-                                                                  true
-                                                              ? "View On Cart"
-                                                              : "Add to Cart",*/
                                                           style: TextStyle(
                                                               fontSize: 10,
                                                               color:
@@ -483,29 +398,6 @@ class _TabProductItemCardWidgetState extends State<TabProductItemCardWidget> {
                                             SizedBox(
                                               height: 20,
                                             ),
-                                            /* AppButton(
-                      label: isProductinCart == true
-                          ? "View On Cart"
-                          : "Add To Basket",
-                      onPressed: () {
-                        isProductinCart == true
-                            ? navigateTo(context, DynamicCartScreen.routeName,
-                                clearAllStack: true)
-                            : _OnTaptoAddProductinCart();
-
-                        */ /* Fluttertoast.showToast(
-                                    msg: "Item Added To Cart",
-                                    toastLength: Toast.LENGTH_SHORT,
-                                    gravity: ToastGravity.CENTER,
-                                    timeInSecForIosWeb: 1,
-                                    backgroundColor: Colors.red,
-                                    textColor: Colors.white,
-                                    fontSize: 16.0
-                                );*/ /*
-                        //
-                      },
-                    ),*/
-                                            //Spacer(),
                                           ],
                                         ),
                                       ),
@@ -513,9 +405,6 @@ class _TabProductItemCardWidgetState extends State<TabProductItemCardWidget> {
                                   ),
                                 ),
                               ),
-                              /* child: ProductDetailsScreen1(
-                                  ProductDetailsScreen1Argument(widget._item,
-                                      isProductinCart, widget._ProductGroupID)),*/
                             ),
                           );
                         });
@@ -549,9 +438,9 @@ class _TabProductItemCardWidgetState extends State<TabProductItemCardWidget> {
       child: Container(
         decoration: BoxDecoration(
             image: DecorationImage(
-                image: NetworkImage(widget._item.ProductImage == ""
+                image: NetworkImage(widget.itemm.ProductImage == ""
                     ? "https://www.ncenet.com/wp-content/uploads/2020/04/No-image-found.jpg"
-                    : widget._item.ProductImage),
+                    : widget.itemm.ProductImage),
                 fit: BoxFit.scaleDown)),
         child: Container(
           // padding: EdgeInsets.all(10),
@@ -560,33 +449,7 @@ class _TabProductItemCardWidgetState extends State<TabProductItemCardWidget> {
             border: Border.all(
               color: borderColor,
             ),
-            /*  gradient: LinearGradient(begin: Alignment.bottomRight, colors: [
-                Colors.black.withOpacity(.8),
-                Colors.black.withOpacity(.0),
-              ])*/
           ),
-          // child: Align(alignment: Alignment.topLeft, child: addWidget())
-
-          /*isAdd == false
-              ? Align(alignment: Alignment.topRight, child: addWidget())
-              :  Align(
-                  alignment: Alignment.bottomCenter,
-                  child: Container(
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        border: Border.all(
-                          color: borderColor,
-                        ),
-                        color: colorWhite),
-                    child: ItemCounterWidget(
-                      onAmountChanged: (newAmount) {
-                        setState(() {
-                          amount = newAmount;
-                        });
-                      },
-                    ),
-                  ),
-                ),*/
         ),
       ),
     );
@@ -594,26 +457,6 @@ class _TabProductItemCardWidgetState extends State<TabProductItemCardWidget> {
 
   Widget addWidget() {
     return InkWell(
-      onTap: () {
-        /* setState(() {
-          isAdd = true;
-          showBottomSheet(
-              context: context,
-              builder: (BuildContext bc) {
-                return SafeArea(
-                  child: Container(
-                    decoration: new BoxDecoration(
-                      borderRadius: BorderRadius.circular(10.0),
-                      color: GetirYellow,
-                    ),
-                    height: 300,
-                    margin: EdgeInsets.only(left: 20, right: 20),
-                    child: ProductDetailsScreen1(widget._item),
-                  ),
-                );
-              });
-        });*/
-      },
       child: Container(
         height: 25,
         width: 42,
@@ -625,13 +468,8 @@ class _TabProductItemCardWidgetState extends State<TabProductItemCardWidget> {
             color: Getirblue),
         child: Center(
           child: Text(
-              "${removeTrailingZeros(widget._item.DiscountPer.toStringAsFixed(2))}\%",
+              "${removeTrailingZeros(widget.itemm.DiscountPer.toStringAsFixed(2))}\%",
               style: TextStyle(fontSize: 10, color: colorWhite)),
-          /* Icon(
-            Icons.add,
-            color: Colors.deepPurple,
-            size: 15,
-          ),*/
         ),
       ),
     );
@@ -662,11 +500,8 @@ class _TabProductItemCardWidgetState extends State<TabProductItemCardWidget> {
               stops: [0.0, 1.0],
               tileMode: TileMode.clamp),
         ),
-        child: /*Image(
-        image: AssetImage(widget.groceryItem.imagePath),
-      ),*/
-            Image.network(
-          widget._item.ProductImage,
+        child: Image.network(
+          widget.itemm.ProductImage,
           frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
             return child;
           },
@@ -688,26 +523,26 @@ class _TabProductItemCardWidgetState extends State<TabProductItemCardWidget> {
     return InkWell(
       onTap: () {
         if (label == "Product Details") {
-          widget._item.Quantity = amount.toDouble();
+          widget.itemm.Quantity = amount.toDouble();
 
           Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => ProductDetailsScreen2(widget._item)),
+                builder: (context) => ProductDetailsScreen2(widget.itemm)),
           );
         } else {
           showCommonDialogWithSingleOption(
               context,
               "Product : " +
-                  widget._item.ProductName +
+                  widget.itemm.ProductName +
                   "\n" +
                   "Product Specification : " +
-                  widget._item.ProductSpecification +
+                  widget.itemm.ProductSpecification +
                   "\n" +
                   "Price : " +
-                  widget._item.UnitPrice.toString() +
+                  widget.itemm.UnitPrice.toString() +
                   " Unit : " +
-                  widget._item.Unit,
+                  widget.itemm.Unit,
               positiveButtonTitle: "OK", onTapOfPositiveButton: () {
             Navigator.of(context).pop();
           });
@@ -755,7 +590,7 @@ class _TabProductItemCardWidgetState extends State<TabProductItemCardWidget> {
       ),
       child: Center(
         child: AppText(
-          text: widget._item.Unit,
+          text: widget.itemm.Unit,
           fontWeight: FontWeight.w600,
           fontSize: 10,
           color: colorWhite,
@@ -785,30 +620,30 @@ class _TabProductItemCardWidgetState extends State<TabProductItemCardWidget> {
   }
 
   double getTotalPrice() {
-    var tot = amount * widget._item.UnitPrice;
+    var tot = amount * widget.itemm.UnitPrice;
     print("sfjklfj" + tot.toString() + "Amount : " + amount.toString());
     _amount.text = "\£" + tot.toString();
-    return amount * widget._item.UnitPrice;
+    return amount * widget.itemm.UnitPrice;
   }
 
   _OnTaptoAddProductinCart() async {
-    String name = widget._item.ProductName;
-    String Alias = widget._item.ProductName;
-    int ProductID = widget._item.ProductID;
-    int CustomerID = widget._item.CustomerID;
+    String name = widget.itemm.ProductName;
+    String Alias = widget.itemm.ProductName;
+    int ProductID = widget.itemm.ProductID;
+    int CustomerID = widget.itemm.CustomerID;
 
-    String Unit = widget._item.Unit;
-    String description = widget._item.ProductSpecification;
-    String ImagePath = widget._item.ProductImage;
+    String Unit = widget.itemm.Unit;
+    String description = widget.itemm.ProductSpecification;
+    String ImagePath = widget.itemm.ProductImage;
     int Qty = amount;
-    double Amount = widget._item.UnitPrice; //getTotalPrice();
-    double DiscountPer = widget._item.DiscountPer;
-    String LoginUserID = widget._item.LoginUserID;
-    String CompanyID = widget._item.ComapanyID;
-    String ProductSpecification = widget._item.ProductSpecification;
-    String ProductImage = widget._item.ProductImage;
+    double Amount = widget.itemm.UnitPrice; //getTotalPrice();
+    double DiscountPer = widget.itemm.DiscountPer;
+    String LoginUserID = widget.itemm.LoginUserID;
+    String CompanyID = widget.itemm.ComapanyID;
+    String ProductSpecification = widget.itemm.ProductSpecification;
+    String ProductImage = widget.itemm.ProductImage;
 
-    double Vat = widget._item.Vat; //getTotalPrice();
+    double Vat = widget.itemm.Vat; //getTotalPrice();
     print("dksjflkf" + Vat.toString());
 
     await OfflineDbHelper.getInstance().getProductCartList();
@@ -862,35 +697,41 @@ class _TabProductItemCardWidgetState extends State<TabProductItemCardWidget> {
       await OfflineDbHelper.getInstance().insertProductToCart(productCartModel);
     }
 
+    List<ProductCartModel> groceryItemdb123 =
+        await OfflineDbHelper.getInstance().getProductCartList();
+    int counttt = groceryItemdb123.length;
+
+    setState(() {
+      SharedPrefHelper.instance.putInt("CounterValue", counttt);
+    });
     fToast = FToast();
     fToast.init(context);
     fToast.showToast(
-      child: showCustomToast(Title: "Item Added To Cart"),
+      child: showCustomToast(Title: "Item Added To Cartfdfdf"),
       gravity: ToastGravity.BOTTOM,
       toastDuration: Duration(seconds: 2),
     );
     isProductinCart = true;
-
-    Navigator.pop(context);
+    Navigator.of(context).pop(counttt);
   }
 
   _OnTaptoAddProductinCartFavorit() async {
-    String name = widget._item.ProductName;
-    String Alias = widget._item.ProductName;
-    int ProductID = widget._item.ProductID;
-    int CustomerID = widget._item.CustomerID;
+    String name = widget.itemm.ProductName;
+    String Alias = widget.itemm.ProductName;
+    int ProductID = widget.itemm.ProductID;
+    int CustomerID = widget.itemm.CustomerID;
 
-    String Unit = widget._item.Unit;
-    String description = widget._item.ProductSpecification;
-    String ImagePath = widget._item.ProductImage;
+    String Unit = widget.itemm.Unit;
+    String description = widget.itemm.ProductSpecification;
+    String ImagePath = widget.itemm.ProductImage;
     int Qty = amount;
-    double Amount = widget._item.UnitPrice; //getTotalPrice();
-    double DiscountPer = widget._item.DiscountPer;
-    String LoginUserID = widget._item.LoginUserID;
-    String CompanyID = widget._item.ComapanyID;
-    String ProductSpecification = widget._item.ProductSpecification;
-    String ProductImage = widget._item.ProductImage;
-    double Vat = widget._item.Vat; //getTotalPrice();
+    double Amount = widget.itemm.UnitPrice; //getTotalPrice();
+    double DiscountPer = widget.itemm.DiscountPer;
+    String LoginUserID = widget.itemm.LoginUserID;
+    String CompanyID = widget.itemm.ComapanyID;
+    String ProductSpecification = widget.itemm.ProductSpecification;
+    String ProductImage = widget.itemm.ProductImage;
+    double Vat = widget.itemm.Vat; //getTotalPrice();
 
     print("VatAmoutn" + " Vat : " + Vat.toString());
 
@@ -940,7 +781,7 @@ class _TabProductItemCardWidgetState extends State<TabProductItemCardWidget> {
 
   Future<void> _onTapOfDeleteContact() async {
     await OfflineDbHelper.getInstance()
-        .deleteContactFavorit(widget._item.ProductID);
+        .deleteContactFavorit(widget.itemm.ProductID);
     fToast.showToast(
       child: showCustomToast(Title: "Item Remove To Favorite"),
       gravity: ToastGravity.BOTTOM,
@@ -957,7 +798,7 @@ class _TabProductItemCardWidgetState extends State<TabProductItemCardWidget> {
     List<ProductCartModel> groceryItemdb =
         await OfflineDbHelper.getInstance().getProductCartFavoritList();
     for (int i = 0; i < groceryItemdb.length; i++) {
-      if (groceryItemdb[i].ProductID == widget._item.ProductID) {
+      if (groceryItemdb[i].ProductID == widget.itemm.ProductID) {
         favorite = true;
         break;
       } else {
@@ -975,7 +816,7 @@ class _TabProductItemCardWidgetState extends State<TabProductItemCardWidget> {
     Navigator.push(
       context,
       MaterialPageRoute(
-          builder: (context) => ProductDetailsScreen2(widget._item)),
+          builder: (context) => ProductDetailsScreen2(widget.itemm)),
     );
   }
 }

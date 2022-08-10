@@ -87,6 +87,8 @@ class ApiClient {
   static const END_POINT_ORDER_ALL_DETAIL_DELETE = 'PlaceOrderDetail/Del';
   static const END_POINT_TAB_PRODUCT_GROUP_DROP_DOWN = 'BrnadID/GroupDropDown';
 
+  static const END_POINT_PRODUCT_REPORTING = 'ProductLedger/Report';
+
   final http.Client httpClient;
 
   ApiClient({this.httpClient});

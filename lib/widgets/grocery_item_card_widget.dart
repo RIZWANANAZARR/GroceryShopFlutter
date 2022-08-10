@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:grocery_app/common_widgets/app_text.dart';
 import 'package:grocery_app/models/grocery_item.dart';
 import 'package:grocery_app/styles/colors.dart';
+import 'package:grocery_app/ui/image_resource.dart';
 
 class GroceryItemCardWidget extends StatelessWidget {
   GroceryItemCardWidget({Key key, this.item}) : super(key: key);
@@ -76,6 +77,7 @@ class GroceryItemCardWidget extends StatelessWidget {
     return Container(
         child: //Image.asset(item.imagePath),
             //Image.network("http://122.169.111.101:206/productimages/beverages.png")
+
             Image.network(
       item.ProductImage,
       frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
@@ -90,7 +92,7 @@ class GroceryItemCardWidget extends StatelessWidget {
       },
       errorBuilder:
           (BuildContext context, Object exception, StackTrace stackTrace) {
-        return Icon(Icons.error);
+        return Image.asset(NO_IMAGE_FOUND);
       },
     ));
   }
