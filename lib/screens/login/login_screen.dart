@@ -418,16 +418,16 @@ class _LoginScreenState extends BaseState<LoginScreen>
         width: double.maxFinite,
         height: COMMON_BUTTON_HEIGHT,
         // ignore: deprecated_member_use
-        child: RaisedButton(
+        child: ElevatedButton(
           onPressed: () {
             //_onTapOfSignInWithGoogle();
           },
-          color: colorRedLight,
+          /* color: colorRedLight,
           shape: RoundedRectangleBorder(
             borderRadius:
                 BorderRadius.all(Radius.circular(COMMON_BUTTON_RADIUS)),
           ),
-          elevation: 0.0,
+          elevation: 0.0,*/
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [

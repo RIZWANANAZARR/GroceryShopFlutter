@@ -1,8 +1,6 @@
 import 'package:badges/badges.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:grocery_app/bloc/others/category/category_bloc.dart';
@@ -294,8 +292,8 @@ class _TabProductItemsScreenState extends BaseState<TabProductItemsScreen>
                   ),
                 ),
                 body: AllProducts.isNotEmpty
-                    ? StaggeredGridView.count(
-                        crossAxisCount: 6,
+                    ? GridView.count(
+                        crossAxisCount: 2,
                         // I only need two card horizontally
                         children: AllProducts.asMap().entries.map<Widget>((e) {
                           GroceryItem groceryItem = e.value;
@@ -315,16 +313,21 @@ class _TabProductItemsScreenState extends BaseState<TabProductItemsScreen>
                                       .toString());*/
                             },
                             child: Container(
-                              padding: EdgeInsets.all(3),
-                              /*child : TabProductItemCardWidget(
-                                itemm: groceryItem,
-                                ProductGroupID: _ProductGroupID,
-                              ),*/
+                              margin: EdgeInsets.all(5),
+                              padding: EdgeInsets.all(5),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                border: Border.all(
+                                  color: borderColor,
+                                ),
+                              ),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
-                                  Center(
-                                    child: InkWell(
+                                  SizedBox(
+                                    height: 100,
+                                    child: Center(
+                                      child: InkWell(
                                         onTap: () {
                                           //Navigator.pop(bootomsheetContext);
                                           Navigator.push(
@@ -335,48 +338,54 @@ class _TabProductItemsScreenState extends BaseState<TabProductItemsScreen>
                                                         groceryItem)),
                                           );
                                         },
-                                        child: Container(
-                                          height: 100,
-                                          width: 100,
-                                          padding: EdgeInsets.all(2),
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(10),
-                                            border: Border.all(
-                                              color: borderColor,
-                                            ),
-                                          ),
-                                          child: Image.network(
-                                            groceryItem.ProductImage,
-                                            frameBuilder: (context, child,
-                                                frame, wasSynchronouslyLoaded) {
+
+                                        //padding: EdgeInsets.all(2),
+                                        /*decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                              border: Border.all(
+                                                color: borderColor,
+                                              ),
+                                            ),*/
+                                        child: Image.network(
+                                          groceryItem.ProductImage,
+                                          frameBuilder: (context, child, frame,
+                                              wasSynchronouslyLoaded) {
+                                            return child;
+                                          },
+                                          loadingBuilder: (context, child,
+                                              loadingProgress) {
+                                            if (loadingProgress == null) {
                                               return child;
-                                            },
-                                            loadingBuilder: (context, child,
-                                                loadingProgress) {
-                                              if (loadingProgress == null) {
-                                                return child;
-                                              } else {
-                                                return CircularProgressIndicator();
-                                              }
-                                            },
-                                            errorBuilder: (BuildContext context,
-                                                Object exception,
-                                                StackTrace stackTrace) {
-                                              return Image.asset(
-                                                  NO_IMAGE_FOUND);
-                                            },
-                                          ),
-                                        )), //imageWidget()),
+                                            } else {
+                                              return CircularProgressIndicator();
+                                            }
+                                          },
+                                          errorBuilder: (BuildContext context,
+                                              Object exception,
+                                              StackTrace stackTrace) {
+                                            return Image.asset(NO_IMAGE_FOUND);
+                                          },
+                                        ),
+                                      ), //imageWidget()),
+                                    ),
                                   ),
                                   SizedBox(
-                                    height: 10,
+                                    height: 5,
                                   ),
-                                  AppText(
-                                    text: groceryItem.ProductName.toUpperCase(),
+                                  Center(
+                                    child: Text(groceryItem.ProductName,
+                                        style: TextStyle(
+                                            fontSize: 10,
+                                            overflow: TextOverflow.ellipsis),
+                                        textAlign: TextAlign.center),
+                                  ),
+
+                                  /* AppText(
+                                    text: groceryItem.ProductName,
                                     fontSize: 10,
                                     color: Colors.black,
-                                  ),
+                                  ),*/
                                   SizedBox(
                                     height: 5,
                                   ),
@@ -663,20 +672,23 @@ class _TabProductItemsScreenState extends BaseState<TabProductItemsScreen>
                                                     });
                                           });
                                         },
-                                        child: Container(
+                                        child: SizedBox(
                                           height: 32,
-                                          width: 100,
-                                          decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(5),
-                                              color: AppColors.primaryColor),
-                                          child: Center(
-                                            child: Text(
-                                              //isProductinCart == true ? "View" : "Add",
-                                              "Add",
-                                              style: TextStyle(
-                                                  fontSize: 10,
-                                                  color: Colors.white),
+                                          child: Container(
+                                            height: 32,
+                                            width: 100,
+                                            decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(5),
+                                                color: AppColors.primaryColor),
+                                            child: Center(
+                                              child: Text(
+                                                //isProductinCart == true ? "View" : "Add",
+                                                "Add",
+                                                style: TextStyle(
+                                                    fontSize: 10,
+                                                    color: Colors.white),
+                                              ),
                                             ),
                                           ),
                                         ),
@@ -688,8 +700,8 @@ class _TabProductItemsScreenState extends BaseState<TabProductItemsScreen>
                             ),
                           );
                         }).toList(),
-                        staggeredTiles: AllProducts.map<StaggeredTile>(
-                            (_) => StaggeredTile.fit(2)).toList(),
+                        /* staggeredTiles: AllProducts.map<StaggeredTile>(
+                            (_) => StaggeredTile.fit(2)).toList(),*/
                         mainAxisSpacing: 3.0,
                         crossAxisSpacing: 0.0, // add some space
                       )

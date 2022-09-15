@@ -256,15 +256,15 @@ class _AccountScreenState extends BaseState<AccountScreen>
       child: Container(
         width: double.maxFinite,
         margin: EdgeInsets.symmetric(horizontal: 25),
-        child: RaisedButton(
-          visualDensity: VisualDensity.compact,
+        child: ElevatedButton(
+          /*visualDensity: VisualDensity.compact,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(18.0),
           ),
           color: Getirblue,
           textColor: Colors.white,
           elevation: 0.0,
-          padding: EdgeInsets.symmetric(vertical: 24, horizontal: 25),
+          padding: EdgeInsets.symmetric(vertical: 24, horizontal: 25),*/
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [

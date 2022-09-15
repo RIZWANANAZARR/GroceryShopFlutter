@@ -1,5 +1,4 @@
 import 'package:expansion_tile_card/expansion_tile_card.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:grocery_app/bloc/others/product/product_bloc.dart';
@@ -500,10 +499,10 @@ class _ProductBrandPaginationState extends BaseState<ProductBrandPagination>
                     buttonHeight: 52.0,
                     buttonMinWidth: 90.0,
                     children: <Widget>[
-                      FlatButton(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(4.0)),
-                        onPressed: () {
+                      GestureDetector(
+                        /* shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(4.0)),*/
+                        onTap: () {
                           _onTapOfEditproduct(PD);
                         },
                         child: Column(
@@ -523,10 +522,13 @@ class _ProductBrandPaginationState extends BaseState<ProductBrandPagination>
                           ],
                         ),
                       ),
-                      FlatButton(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(4.0)),
-                        onPressed: () {
+                      SizedBox(
+                        width: 10,
+                      ),
+                      GestureDetector(
+                        /* shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(4.0)),*/
+                        onTap: () {
                           _onTapOfDelete(Response.details[index].pkID);
                         },
                         child: Column(

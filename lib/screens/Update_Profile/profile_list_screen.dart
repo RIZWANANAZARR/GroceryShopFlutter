@@ -1,5 +1,4 @@
 import 'package:expansion_tile_card/expansion_tile_card.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:grocery_app/bloc/others/category/category_bloc.dart';
@@ -575,10 +574,8 @@ class _ProfileListScreenState extends BaseState<ProfileListScreen>
                     buttonHeight: 52.0,
                     buttonMinWidth: 90.0,
                     children: <Widget>[
-                      FlatButton(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(4.0)),
-                        onPressed: () {
+                      GestureDetector(
+                        onTap: () {
                           _onTapOfEditproduct(PD);
                         },
                         child: Column(
@@ -598,12 +595,13 @@ class _ProfileListScreenState extends BaseState<ProfileListScreen>
                           ],
                         ),
                       ),
+                      SizedBox(
+                        width: 10,
+                      ),
                       CustomerType.toLowerCase().toString() == "customer"
                           ? Container()
-                          : FlatButton(
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(4.0)),
-                              onPressed: () {
+                          : GestureDetector(
+                              onTap: () {
                                 _onTapOfDelete(
                                     Response.details[index].customerID,
                                     Response.details[index].customerType);

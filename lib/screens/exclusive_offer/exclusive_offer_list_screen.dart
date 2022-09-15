@@ -1,19 +1,15 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:grocery_app/bloc/others/category/category_bloc.dart';
 import 'package:grocery_app/common_widgets/app_text.dart';
-import 'package:grocery_app/models/api_request/Category/category_list_request.dart';
 import 'package:grocery_app/models/api_request/Exclusive_Offer/exclusive_offer_list_request.dart';
 import 'package:grocery_app/models/api_response/Customer/customer_login_response.dart';
 import 'package:grocery_app/models/api_response/company_details_response.dart';
 import 'package:grocery_app/models/grocery_item.dart';
 import 'package:grocery_app/screens/base/base_screen.dart';
-import 'package:grocery_app/screens/filter_screen.dart';
 import 'package:grocery_app/screens/product_details/product_details_screen.dart';
 import 'package:grocery_app/ui/color_resource.dart';
-import 'package:grocery_app/utils/general_utils.dart';
 import 'package:grocery_app/utils/shared_pref_helper.dart';
 import 'package:grocery_app/widgets/grocery_item_card_widget.dart';
 import 'package:range_slider_dialog/range_slider_dialog.dart';
@@ -47,9 +43,10 @@ class _ExclusiveOfferListScreenState extends BaseState<ExclusiveOfferListScreen>
     // TODO: implement initState
     super.initState();
     _offlineLogindetails = SharedPrefHelper.instance.getLoginUserData();
-    _offlineCompanydetails= SharedPrefHelper.instance.getCompanyData();
+    _offlineCompanydetails = SharedPrefHelper.instance.getCompanyData();
     CustomerID = _offlineLogindetails.details[0].customerID.toString();
-    LoginUserID = _offlineLogindetails.details[0].customerName.trim().toString();
+    LoginUserID =
+        _offlineLogindetails.details[0].customerName.trim().toString();
     CompanyID = _offlineCompanydetails.details[0].pkId.toString();
     _categoryScreenBloc = CategoryScreenBloc(baseBloc);
 
@@ -122,26 +119,27 @@ class _ExclusiveOfferListScreenState extends BaseState<ExclusiveOfferListScreen>
             ),
           ),*/
           GestureDetector(
-              onTap: ()  {
+              onTap: () {
                 //navigateTo(context, FilterScreen.routeName);
-               // RangeValues _currentRangeValues = const RangeValues(40, 80);
+                // RangeValues _currentRangeValues = const RangeValues(40, 80);
 
                 //showcustomdialog(context1: context,rangeValues: _currentRangeValues);
 
-              //  dialog(context,_currentRangeValues);
+                //  dialog(context,_currentRangeValues);
 
-                showRangeSliderDialog(context, 1, 100, this._rangeValues, (e)
-                {
+                showRangeSliderDialog(context, 1, 100, this._rangeValues, (e) {
                   setState(() {
                     this._rangeValues = e;
-                    print("RangValue" + "Value Start: " + e.start.toInt().toString() + "Value End :" + e.end.toInt().toString());
-                    _categoryScreenBloc.add(
-                        ExclusiveOfferListRequestCallEvent(
-                            ExclusiveOfferListRequest(
-                                PercentTo: e.start.toInt().toString(),
-                                PercentFrom:  e.end.toInt().toString(),
-                                CompanyId: CompanyID)));
-
+                    print("RangValue" +
+                        "Value Start: " +
+                        e.start.toInt().toString() +
+                        "Value End :" +
+                        e.end.toInt().toString());
+                    _categoryScreenBloc.add(ExclusiveOfferListRequestCallEvent(
+                        ExclusiveOfferListRequest(
+                            PercentTo: e.start.toInt().toString(),
+                            PercentFrom: e.end.toInt().toString(),
+                            CompanyId: CompanyID)));
                   });
                 });
               },
@@ -209,21 +207,20 @@ class _ExclusiveOfferListScreenState extends BaseState<ExclusiveOfferListScreen>
       ExclusiveOfferListResponseState state, BuildContext context) {
     AllProducts.clear();
     for (int i = 0; i < state.response.details.length; i++) {
-
       GroceryItem groceryItem = GroceryItem();
       groceryItem.ProductName = state.response.details[i].productName;
       groceryItem.ProductID = state.response.details[i].productID;
       groceryItem.ProductAlias = state.response.details[i].productName;
-      groceryItem.CustomerID =1;
+      groceryItem.CustomerID = 1;
       groceryItem.Unit = state.response.details[i].unit;
       groceryItem.UnitPrice = state.response.details[i].unitPrice;
       groceryItem.Quantity = 0.00;
       groceryItem.DiscountPer = state.response.details[i].discountPercent;
       groceryItem.LoginUserID = LoginUserID;
       groceryItem.ComapanyID = CompanyID;
-      groceryItem.ProductSpecification = state.response.details[i].productSpecification;
+      groceryItem.ProductSpecification =
+          state.response.details[i].productSpecification;
       // groceryItem.imagePath = "http://122.169.111.101:206/"+state.response.details[i].productImage;//"http://122.169.111.101:206/productimages/beverages.png";
-
 
       groceryItem.ProductImage = state.response.details[i].productImage == ""
           ? "https://img.icons8.com/bubbles/344/no-image.png"
@@ -234,28 +231,11 @@ class _ExclusiveOfferListScreenState extends BaseState<ExclusiveOfferListScreen>
     }
   }
 
-
-
-
-
-
-
-
-
-
-
-
-
-  showcustomdialog({
-    BuildContext context1,
-    RangeValues rangeValues
-
-  }) async {
+  showcustomdialog({BuildContext context1, RangeValues rangeValues}) async {
     await showDialog(
       barrierDismissible: false,
       context: context1,
       builder: (BuildContext context123) {
-
         return SimpleDialog(
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(32.0))),
@@ -311,7 +291,7 @@ class _ExclusiveOfferListScreenState extends BaseState<ExclusiveOfferListScreen>
                               width: double.maxFinite,
                               child: Row(
                                 children: [
-                                 /* TextField(
+                                  /* TextField(
                                       enabled: true,
                                       controller: edt_PercentageFillter,
                                       textInputAction: TextInputAction.next,
@@ -328,7 +308,6 @@ class _ExclusiveOfferListScreenState extends BaseState<ExclusiveOfferListScreen>
                                       ) // baseTheme.textTheme.headline2.copyWith(color: colorBlack),
 
                                       ),*/
-
                                 ],
                               ),
                             ),
@@ -341,12 +320,8 @@ class _ExclusiveOfferListScreenState extends BaseState<ExclusiveOfferListScreen>
                             max: 100,
                             divisions: 5,
                             labels: RangeLabels(
-                              rangeValues.start
-                                  .round()
-                                  .toString(),
-                              rangeValues.end
-                                  .round()
-                                  .toString(),
+                              rangeValues.start.round().toString(),
+                              rangeValues.end.round().toString(),
                             ),
                             onChanged: (RangeValues values) {
                               setState(() {
@@ -357,8 +332,8 @@ class _ExclusiveOfferListScreenState extends BaseState<ExclusiveOfferListScreen>
                         ],
                       ),
                     ),
-                    FlatButton(
-                        color: colorPrimary,
+                    ElevatedButton(
+                        // color: colorPrimary,
                         onPressed: () {
                           setState(() {
                             _categoryScreenBloc.add(
@@ -367,9 +342,8 @@ class _ExclusiveOfferListScreenState extends BaseState<ExclusiveOfferListScreen>
                                         PercentTo: rangeValues.start
                                             .round()
                                             .toString(),
-                                        PercentFrom:  rangeValues.end
-                                            .round()
-                                            .toString(),
+                                        PercentFrom:
+                                            rangeValues.end.round().toString(),
                                         CompanyId: CompanyID)));
                           });
                           // _productList[index1].SerialNo = edt_Application.text;
@@ -387,17 +361,17 @@ class _ExclusiveOfferListScreenState extends BaseState<ExclusiveOfferListScreen>
     );
   }
 
-    void showRangeSliderDialog(BuildContext context, int minValue, int maxValue,
-        RangeValues defaultValue, Function(RangeValues) callback) async {
-      await RangeSliderDialog.display(context,
-          minValue: minValue ?? 1,
-          maxValue: maxValue ?? 40,
-          acceptButtonText: 'Apply',
-          cancelButtonText: 'Close',
-          headerText: 'Select Discount',
-          selectedRangeValues: defaultValue, onApplyButtonClick: (value) {
-            callback(value);
-            Navigator.pop(context);
-          });
-    }
+  void showRangeSliderDialog(BuildContext context, int minValue, int maxValue,
+      RangeValues defaultValue, Function(RangeValues) callback) async {
+    await RangeSliderDialog.display(context,
+        minValue: minValue ?? 1,
+        maxValue: maxValue ?? 40,
+        acceptButtonText: 'Apply',
+        cancelButtonText: 'Close',
+        headerText: 'Select Discount',
+        selectedRangeValues: defaultValue, onApplyButtonClick: (value) {
+      callback(value);
+      Navigator.pop(context);
+    });
+  }
 }

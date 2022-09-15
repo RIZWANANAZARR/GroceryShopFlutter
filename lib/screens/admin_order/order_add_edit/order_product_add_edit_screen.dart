@@ -333,12 +333,12 @@ class _OrderProductAddEditState extends BaseState<OrderProductAddEdit>
                           SizedBox(
                             height: 10,
                           ),
-                          FlatButton(
-                            height: 60,
+                          ElevatedButton(
+                            /*height: 60,
                             minWidth: 300,
                             color: Getirblue,
                             shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(4.0)),
+                                borderRadius: BorderRadius.circular(4.0)),*/
                             onPressed: () {
                               showCommonDialogWithTwoOptions(
                                 context,
@@ -955,9 +955,9 @@ class _OrderProductAddEditState extends BaseState<OrderProductAddEdit>
                         buttonHeight: 52.0,
                         buttonMinWidth: 90.0,
                         children: <Widget>[
-                            FlatButton(
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(4.0)),
+                            ElevatedButton(
+                              /*shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(4.0)),*/
                               onPressed: () {
                                 // _onTapOfEditproduct(PD);
 
@@ -1269,7 +1269,6 @@ class _OrderProductAddEditState extends BaseState<OrderProductAddEdit>
                                   }
 
                                   // _productList[index1].SerialNo = edt_Application.text;
-
                                 } else {
                                   commonalertbox("Remarks should not Empty");
                                 }

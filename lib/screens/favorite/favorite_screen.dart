@@ -1,7 +1,5 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:grocery_app/bloc/base/base_bloc.dart';
 import 'package:grocery_app/bloc/others/category/category_bloc.dart';
@@ -179,8 +177,8 @@ class _FavoriteItemsScreenState extends BaseState<FavoriteItemsScreen>
           ),
         ),
         body: AllProducts.length != 0
-            ? StaggeredGridView.count(
-                crossAxisCount: 4,
+            ? GridView.count(
+                crossAxisCount: 2,
                 // I only need two card horizontally
                 children: AllProducts.asMap().entries.map<Widget>((e) {
                   GroceryItem groceryItem = e.value;
@@ -195,9 +193,8 @@ class _FavoriteItemsScreenState extends BaseState<FavoriteItemsScreen>
                 ),
               ),*/
                           Container(
-                        width: width,
-                        height: height,
-                        margin: EdgeInsets.all(10),
+                        margin: EdgeInsets.all(5),
+                        padding: EdgeInsets.all(5),
                         decoration: BoxDecoration(
                           border: Border.all(
                             color: borderColor,
@@ -206,37 +203,32 @@ class _FavoriteItemsScreenState extends BaseState<FavoriteItemsScreen>
                             borderRadius,
                           ),
                         ),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 15,
-                            vertical: 15,
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Expanded(
-                                child: Center(
-                                  child: imageWidget(groceryItem.ProductImage),
-                                ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Center(
+                              child: Container(
+                                height: 100,
+                                width: 100,
+                                child: imageWidget(groceryItem.ProductImage),
                               ),
-                              SizedBox(
-                                height: 20,
-                              ),
-                              AppText(
-                                text: groceryItem.ProductName,
-                                fontSize: 12,
-                                fontWeight: FontWeight.bold,
-                              ),
-                              AppText(
-                                text: groceryItem.ProductSpecification,
-                                fontSize: 12,
-                                fontWeight: FontWeight.w600,
-                                color: Color(0xFF7C7C7C),
-                              ),
-                              SizedBox(
-                                height: 20,
-                              ),
-                              Row(
+                            ),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            Center(
+                              child: Text(groceryItem.ProductName,
+                                  style: TextStyle(
+                                      fontSize: 10,
+                                      overflow: TextOverflow.ellipsis),
+                                  textAlign: TextAlign.center),
+                            ),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            Container(
+                              margin: EdgeInsets.only(left: 10, right: 10),
+                              child: Row(
                                 children: [
                                   AppText(
                                     text:
@@ -250,17 +242,15 @@ class _FavoriteItemsScreenState extends BaseState<FavoriteItemsScreen>
                                         _onTapOfDeleteContact(
                                             context, groceryItem.ProductID);
                                       },
-                                      child: DeleteWidget())
+                                      child: DeleteWidget()),
                                 ],
-                              )
-                            ],
-                          ),
+                              ),
+                            )
+                          ],
                         ),
                       ));
                 }).toList(),
-                staggeredTiles:
-                    AllProducts.map<StaggeredTile>((_) => StaggeredTile.fit(2))
-                        .toList(),
+
                 mainAxisSpacing: 3.0,
                 crossAxisSpacing: 0.0, // add some space
               )

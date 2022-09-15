@@ -367,10 +367,10 @@ class _InquiryProductListScreenState extends BaseState<InquiryProductListScreen>
                 buttonHeight: 52.0,
                 buttonMinWidth: 90.0,
                 children: <Widget>[
-                  FlatButton(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(4.0)),
-                    onPressed: () {
+                  GestureDetector(
+                    /* shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(4.0)),*/
+                    onTap: () {
                       _onTapOfEditContact(index);
                     },
                     child: Column(
@@ -389,10 +389,13 @@ class _InquiryProductListScreenState extends BaseState<InquiryProductListScreen>
                       ],
                     ),
                   ),
-                  FlatButton(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(4.0)),
-                    onPressed: () {
+                  SizedBox(
+                    width: 10,
+                  ),
+                  GestureDetector(
+                    /* shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(4.0)),*/
+                    onTap: () {
                       _onTapOfDeleteContact(index);
                     },
                     child: Column(

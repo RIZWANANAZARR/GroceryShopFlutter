@@ -35,8 +35,10 @@ class GroceryItemCardWidget extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Expanded(
-              child: Center(
-                child: imageWidget(),
+              child: Container(
+                child: Center(
+                  child: imageWidget(),
+                ),
               ),
             ),
             SizedBox(
@@ -44,15 +46,15 @@ class GroceryItemCardWidget extends StatelessWidget {
             ),
             AppText(
               text: item.ProductName,
-              fontSize: 12,
+              fontSize: 10,
               fontWeight: FontWeight.bold,
             ),
-            AppText(
+            /*AppText(
               text: item.ProductSpecification,
               fontSize: 12,
               fontWeight: FontWeight.w600,
               color: Color(0xFF7C7C7C),
-            ),
+            ),*/
             SizedBox(
               height: 20,
             ),
@@ -75,26 +77,27 @@ class GroceryItemCardWidget extends StatelessWidget {
 
   Widget imageWidget() {
     return Container(
-        child: //Image.asset(item.imagePath),
-            //Image.network("http://122.169.111.101:206/productimages/beverages.png")
+      child: //Image.asset(item.imagePath),
+          //Image.network("http://122.169.111.101:206/productimages/beverages.png")
 
-            Image.network(
-      item.ProductImage,
-      frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
-        return child;
-      },
-      loadingBuilder: (context, child, loadingProgress) {
-        if (loadingProgress == null) {
+          Image.network(
+        item.ProductImage,
+        frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
           return child;
-        } else {
-          return CircularProgressIndicator();
-        }
-      },
-      errorBuilder:
-          (BuildContext context, Object exception, StackTrace stackTrace) {
-        return Image.asset(NO_IMAGE_FOUND);
-      },
-    ));
+        },
+        loadingBuilder: (context, child, loadingProgress) {
+          if (loadingProgress == null) {
+            return child;
+          } else {
+            return CircularProgressIndicator();
+          }
+        },
+        errorBuilder:
+            (BuildContext context, Object exception, StackTrace stackTrace) {
+          return Image.asset(NO_IMAGE_FOUND);
+        },
+      ),
+    );
   }
 
   Widget addWidget() {

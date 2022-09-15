@@ -18,7 +18,7 @@
     <uses-permission android:name="android.permission.WRITE_CONTACTS" />
 
     <application
-        android:name="io.flutter.app.FlutterApplication"
+        android:name="${applicationName}"
         android:label="Sk Spices"
         android:usesCleartextTraffic="true"
         android:icon="@drawable/sk_logo"

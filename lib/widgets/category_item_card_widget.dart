@@ -37,7 +37,16 @@ class CategoryItemCardWidget extends StatelessWidget {
             child: imageWidget(),
           ),
           SizedBox(
-            height: 60,
+            height: 10,
+          ),
+          AppText(
+            text: item.name,
+            textAlign: TextAlign.center,
+            fontSize: 10,
+            fontWeight: FontWeight.bold,
+          ),
+          /* SizedBox(
+            height: 20,
             child: Center(
               child: AppText(
                 text: item.name,
@@ -46,7 +55,7 @@ class CategoryItemCardWidget extends StatelessWidget {
                 fontWeight: FontWeight.bold,
               ),
             ),
-          ),
+          ),*/
         ],
       ),
     );

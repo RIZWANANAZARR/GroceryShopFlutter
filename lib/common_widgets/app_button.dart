@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:grocery_app/ui/color_resource.dart';
 
 class AppButton extends StatelessWidget {
   final String label;
@@ -29,15 +28,15 @@ class AppButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.maxFinite,
-      child: RaisedButton(
-        visualDensity: VisualDensity.compact,
+      child: ElevatedButton(
+        /*  visualDensity: VisualDensity.compact,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(roundness),
         ),
         color: CardColor == null ? Getirblue : Colors.white,
         textColor: textcolor == null ? Colors.white : textcolor,
         elevation: 0.0,
-        padding: padding,
+        padding: padding,*/
         child: Stack(
           fit: StackFit.passthrough,
           children: <Widget>[

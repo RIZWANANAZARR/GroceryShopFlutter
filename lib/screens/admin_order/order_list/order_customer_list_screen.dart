@@ -642,10 +642,10 @@ class _OrderCustomerListState extends BaseState<OrderCustomerList>
                     buttonHeight: 52.0,
                     buttonMinWidth: 90.0,
                     children: <Widget>[
-                      FlatButton(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(4.0)),
-                        onPressed: () {
+                      GestureDetector(
+                        /*shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(4.0)),*/
+                        onTap: () {
                           _onTapOfEditproduct(PD);
                         },
                         child: Column(
@@ -666,10 +666,10 @@ class _OrderCustomerListState extends BaseState<OrderCustomerList>
                         ),
                       ),
                       edt_LeadStatus.text == "open"
-                          ? FlatButton(
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(4.0)),
-                              onPressed: () {
+                          ? GestureDetector(
+                              /*shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(4.0)),*/
+                              onTap: () {
                                 _onTapOfDelete(
                                     Response.details[index].InvoiceNo);
                               },
@@ -1047,7 +1047,6 @@ class _OrderCustomerListState extends BaseState<OrderCustomerList>
         totnetamnt += tot;
 
         // ALL_Name_ID all_name_id = ALL_Name_ID();
-
       }
       ALL_Name_ID all_name_id = ALL_Name_ID();
       all_name_id.Amount = amount_;

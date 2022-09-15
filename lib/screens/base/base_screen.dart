@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:grocery_app/bloc/base/base_bloc.dart';
 import 'package:grocery_app/models/common/globals.dart';
@@ -104,28 +103,24 @@ mixin BasicScreen<Screen extends BaseStatefulWidget> on BaseState<Screen> {
               builder: (BuildContext context,
                   void Function(void Function()) setState) {
                 /*return AppBar(
-                  backgroundColor: screenStatusBarColor ?? Colors.transparent*//*== null ? Colors.transparent:Colors.transparent*//*,
+                  backgroundColor: screenStatusBarColor ?? Colors.transparent*/ /*== null ? Colors.transparent:Colors.transparent*/ /*,
                   elevation: 0,
                 );*/
-                if(screenStatusBarColor == colorWhite)
-                  {
-                   /* return NewGradientAppBar(
+                if (screenStatusBarColor == colorWhite) {
+                  /* return NewGradientAppBar(
                         title: Text('Flutter'),
                         gradient: LinearGradient(colors: [Colors.transparent, Colors.transparent, Colors.transparent])
                     );*/
-                    return AppBar(
-                      backgroundColor: Colors.white,
-                          elevation: 0,
-                    );
-                  }
-                else
-                  {
-                    return AppBar(
-                        title: Text('Flutter'),
-                        //gradient: LinearGradient(colors: [Colors.blue, Colors.purple, Colors.red])
-                    );
-                  }
-
+                  return AppBar(
+                    backgroundColor: Colors.white,
+                    elevation: 0,
+                  );
+                } else {
+                  return AppBar(
+                    title: Text('Flutter'),
+                    //gradient: LinearGradient(colors: [Colors.blue, Colors.purple, Colors.red])
+                  );
+                }
               },
             ),
           ),

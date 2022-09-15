@@ -198,42 +198,42 @@ class _LocalNotificationsState extends State<LocalNotifications> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              RaisedButton(
+              ElevatedButton(
                 child: Text('Simple Notification'),
                 onPressed: () => showSimpleNotification(),
               ),
               SizedBox(height: 15),
-              RaisedButton(
+              ElevatedButton(
                 child: Text('Schedule Notification'),
                 onPressed: () => showScheduleNotification(),
               ),
               SizedBox(height: 15),
-              RaisedButton(
+              ElevatedButton(
                 child: Text('Periodic Notification'),
                 onPressed: () => showPeriodicNotification(),
               ),
               SizedBox(height: 15),
-              RaisedButton(
+              ElevatedButton(
                 child: Text('Big Picture Notification'),
                 onPressed: () => showBigPictureNotification(),
               ),
               SizedBox(height: 15),
-              RaisedButton(
+              ElevatedButton(
                 child: Text('Big Text Notification'),
                 onPressed: () => showBigTextNotification(),
               ),
               SizedBox(height: 15),
-              RaisedButton(
+              ElevatedButton(
                 child: Text('Insistent Notification'),
                 onPressed: () => showInsistentNotification(),
               ),
               SizedBox(height: 15),
-              RaisedButton(
+              ElevatedButton(
                 child: Text('OnGoing Notification'),
                 onPressed: () => showOngoingNotification(),
               ),
               SizedBox(height: 15),
-              RaisedButton(
+              ElevatedButton(
                 child: Text('Progress Notification'),
                 onPressed: () => showProgressNotification(),
               ),

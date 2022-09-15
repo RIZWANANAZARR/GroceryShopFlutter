@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:grocery_app/bloc/others/category/category_bloc.dart';
 import 'package:grocery_app/common_widgets/app_text.dart';
 import 'package:grocery_app/models/api_request/Tab_List/tab_product_group_list_request.dart';
@@ -227,8 +225,8 @@ class _ExploreScreenState extends BaseState<ExploreScreen>
   }
 
   Widget getStaggeredGridView(BuildContext context) {
-    return StaggeredGridView.count(
-      crossAxisCount: 4,
+    return GridView.count(
+      crossAxisCount: 2,
       children: AllProducts.asMap().entries.map<Widget>((e) {
         int index = e.key;
         CategoryItem categoryItem = e.value;
@@ -247,8 +245,8 @@ class _ExploreScreenState extends BaseState<ExploreScreen>
       }).toList(),
 
       //Here is the place that we are getting flexible/ dynamic card for various images
-      staggeredTiles:
-          AllProducts.map<StaggeredTile>((_) => StaggeredTile.fit(2)).toList(),
+      /*staggeredTiles:
+          AllProducts.map<StaggeredTile>((_) => StaggeredTile.fit(2)).toList(),*/
       mainAxisSpacing: 3.0,
       crossAxisSpacing: 4.0, // add some space
     );

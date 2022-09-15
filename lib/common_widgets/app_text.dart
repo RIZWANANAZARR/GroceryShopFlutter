@@ -10,7 +10,7 @@ class AppText extends StatelessWidget {
   const AppText({
     Key key,
     this.text,
-    this.fontSize = 18,
+    this.fontSize = 10,
     this.fontWeight = FontWeight.normal,
     this.color = Colors.black,
     this.textAlign,
@@ -22,7 +22,6 @@ class AppText extends StatelessWidget {
       text,
       textAlign: textAlign == null ? null : TextAlign.center,
       style: TextStyle(
-
         fontSize: fontSize,
         fontWeight: fontWeight,
         color: color,

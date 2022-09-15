@@ -25,25 +25,32 @@ class WelcomeScreen extends StatelessWidget {
               */ /*fit: BoxFit.cover,*/ /*
             ),
           ),*/
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              /* icon(),*/
-              welcomeTextWidget(),
-              SizedBox(
-                height: 40,
+          child: SingleChildScrollView(
+            child: Container(
+              child: Column(
+                /* crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,*/
+                children: [
+                  /* icon(),*/
+                  SizedBox(
+                    height: 40,
+                  ),
+                  welcomeTextWidget(),
+                  SizedBox(
+                    height: 40,
+                  ),
+                  Image.asset(WelComeImage),
+                  sloganText(),
+                  SizedBox(
+                    height: 40,
+                  ),
+                  getButton(context),
+                  SizedBox(
+                    height: 40,
+                  )
+                ],
               ),
-              Image.asset(WelComeImage),
-              sloganText(),
-              SizedBox(
-                height: 40,
-              ),
-              getButton(context),
-              SizedBox(
-                height: 40,
-              )
-            ],
+            ),
           ),
         ));
   }

@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:grocery_app/bloc/others/category/category_bloc.dart';
 import 'package:grocery_app/common_widgets/app_text.dart';
 import 'package:grocery_app/models/api_request/ProductGroup/product_group_list_request.dart';
@@ -118,52 +116,49 @@ class _ExploreDashBoardScreenState extends BaseState<ExploreDashBoardScreen>
   @override
   Widget buildBody(BuildContext context) {
     return WillPopScope(
-      onWillPop: () {
-        navigateTo(context, TabHomePage.routeName, clearAllStack: true);
-        return new Future(() => false);
-      },
-      child: Scaffold(
-          appBar: AppBar(
-            backgroundColor: colorWhite,
-            leading: InkWell(
-                onTap: () {
-                  navigateTo(context, TabHomePage.routeName,
-                      clearAllStack: true);
-                },
-                child: Icon(
-                  Icons.keyboard_arrow_left,
-                  size: 35,
-                  color: Getirblue,
-                )),
-            actions: [
-              InkWell(
-                onTap: () {
-                  navigateTo(context, AllProductSearch.routeName,
-                      clearAllStack: true);
-                },
-                child: Container(
-                  margin: EdgeInsets.only(right: 10),
+        onWillPop: _onBackPressed,
+        child: Scaffold(
+            appBar: AppBar(
+              backgroundColor: colorWhite,
+              leading: InkWell(
+                  onTap: () {
+                    navigateTo(context, TabHomePage.routeName,
+                        clearAllStack: true);
+                  },
                   child: Icon(
-                    Icons.search,
+                    Icons.keyboard_arrow_left,
+                    size: 35,
                     color: Getirblue,
-                    size: 32,
+                  )),
+              actions: [
+                InkWell(
+                  onTap: () {
+                    navigateTo(context, AllProductSearch.routeName,
+                        clearAllStack: true);
+                  },
+                  child: Container(
+                    margin: EdgeInsets.only(right: 10),
+                    child: Icon(
+                      Icons.search,
+                      color: Getirblue,
+                      size: 32,
+                    ),
                   ),
+                )
+              ],
+              title: Text(
+                "Find Products",
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Getirblue,
                 ),
-              )
-            ],
-            title: Text(
-              "Find Products",
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                color: Getirblue,
               ),
             ),
-          ),
-          body: SafeArea(
-            child: Column(
-              children: [
-                /* Row(
+            body: SafeArea(
+              child: Column(
+                children: [
+                  /* Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Expanded(
@@ -179,13 +174,16 @@ class _ExploreDashBoardScreenState extends BaseState<ExploreDashBoardScreen>
               ],
             ),*/
 
-                Expanded(
-                  child: getStaggeredGridView(context),
-                ),
-              ],
-            ),
-          )),
-    );
+                  Expanded(
+                    child: getStaggeredGridView(context),
+                  ),
+                ],
+              ),
+            )));
+  }
+
+  Future<bool> _onBackPressed() {
+    navigateTo(context, TabHomePage.routeName, clearAllStack: true);
   }
 
   Widget getHeader() {
@@ -211,8 +209,8 @@ class _ExploreDashBoardScreenState extends BaseState<ExploreDashBoardScreen>
   }
 
   Widget getStaggeredGridView(BuildContext context) {
-    return StaggeredGridView.count(
-      crossAxisCount: 4,
+    return GridView.count(
+      crossAxisCount: 2,
       children: AllBrands.asMap().entries.map<Widget>((e) {
         int index = e.key;
         CategoryItem categoryItem = e.value;
@@ -231,8 +229,8 @@ class _ExploreDashBoardScreenState extends BaseState<ExploreDashBoardScreen>
       }).toList(),
 
       //Here is the place that we are getting flexible/ dynamic card for various images
-      staggeredTiles:
-          AllBrands.map<StaggeredTile>((_) => StaggeredTile.fit(2)).toList(),
+      /*staggeredTiles:
+          AllBrands.map<StaggeredTile>((_) => StaggeredTile.fit(2)).toList(),*/
       mainAxisSpacing: 3.0,
       crossAxisSpacing: 4.0, // add some space
     );

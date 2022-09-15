@@ -141,13 +141,13 @@ Widget getCommonButton(ThemeData baseTheme, Function onPressed, String text,
   return Container(
     width: width,
     height: height,
-    child: RaisedButton(
+    child: ElevatedButton(
       onPressed: onPressed,
-      color: backGroundColor,
+      /* color: backGroundColor,
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(radius)),
           side: BorderSide(width: showOnlyBorder ? 2 : 0, color: borderColor)),
-      elevation: elevation,
+      elevation: elevation,*/
       child: Text(
         text,
         textAlign: TextAlign.center,

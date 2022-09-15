@@ -399,7 +399,7 @@ class _AdminRegistrationScreenState extends BaseState<AdminRegistrationScreen>
     );
   }
 
-  Widget getButton(BuildContext context) {
+  getButton(BuildContext context) {
     return AppButton(
       label: "Update Profile",
       fontWeight: FontWeight.w600,
@@ -501,16 +501,16 @@ class _AdminRegistrationScreenState extends BaseState<AdminRegistrationScreen>
         width: double.maxFinite,
         height: COMMON_BUTTON_HEIGHT,
         // ignore: deprecated_member_use
-        child: RaisedButton(
+        child: ElevatedButton(
           onPressed: () {
             //_onTapOfSignInWithGoogle();
           },
-          color: colorRedLight,
+          /*color: colorRedLight,
           shape: RoundedRectangleBorder(
             borderRadius:
                 BorderRadius.all(Radius.circular(COMMON_BUTTON_RADIUS)),
           ),
-          elevation: 0.0,
+          elevation: 0.0,*/
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -542,15 +542,15 @@ class _AdminRegistrationScreenState extends BaseState<AdminRegistrationScreen>
       child: Container(
         width: double.maxFinite,
         margin: EdgeInsets.symmetric(horizontal: 10),
-        child: RaisedButton(
-          visualDensity: VisualDensity.compact,
+        child: ElevatedButton(
+          /*visualDensity: VisualDensity.compact,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(18.0),
           ),
           color: Getirblue,
           textColor: Colors.white,
           elevation: 0.0,
-          padding: EdgeInsets.symmetric(vertical: 24, horizontal: 25),
+          padding: EdgeInsets.symmetric(vertical: 24, horizontal: 25),*/
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [

@@ -1,7 +1,5 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:grocery_app/bloc/others/category/category_bloc.dart';
 import 'package:grocery_app/common_widgets/app_text.dart';
 import 'package:grocery_app/models/api_request/Category/category_list_request.dart';
@@ -147,8 +145,8 @@ class _CategoryItemsScreenState extends BaseState<CategoryItemsScreen>
         ),
       ),
       body: AllProducts.length != 0
-          ? StaggeredGridView.count(
-              crossAxisCount: 4,
+          ? GridView.count(
+              crossAxisCount: 2,
               // I only need two card horizontally
               children: AllProducts.asMap().entries.map<Widget>((e) {
                 GroceryItem groceryItem = e.value;
@@ -164,9 +162,9 @@ class _CategoryItemsScreenState extends BaseState<CategoryItemsScreen>
                   ),
                 );
               }).toList(),
-              staggeredTiles:
+              /* staggeredTiles:
                   AllProducts.map<StaggeredTile>((_) => StaggeredTile.fit(2))
-                      .toList(),
+                      .toList(),*/
               mainAxisSpacing: 3.0,
               crossAxisSpacing: 0.0, // add some space
             )

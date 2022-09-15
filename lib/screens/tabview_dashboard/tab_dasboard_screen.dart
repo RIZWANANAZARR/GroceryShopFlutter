@@ -79,10 +79,12 @@ class _TabHomePageState extends BaseState<TabHomePage>
 
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
+  var androidSettings =
+      const AndroidInitializationSettings('@drawable/sk_logo.jpg');
 
 // initialise the plugin. app_icon needs to be a added as a drawable resource to the Android head project
-  AndroidInitializationSettings initializationSettingsAndroid =
-      AndroidInitializationSettings('sk_logo');
+  /*AndroidInitializationSettings initializationSettingsAndroid =
+      AndroidInitializationSettings('sk_logo');*/
 
   void registerNotification() async {
     await Firebase.initializeApp();
@@ -95,7 +97,7 @@ class _TabHomePageState extends BaseState<TabHomePage>
     );
 
     final InitializationSettings initializationSettings =
-        InitializationSettings(android: initializationSettingsAndroid);
+        InitializationSettings(android: androidSettings);
     await flutterLocalNotificationsPlugin.initialize(initializationSettings,
         onSelectNotification: onSelectNotification);
 
@@ -544,7 +546,6 @@ class _TabHomePageState extends BaseState<TabHomePage>
               SearchInquiryListByNameRequest(word:  edt_CustomerName.text,CompanyId:CompanyID.toString(),LoginUserID: LoginUserID,needALL: "1")));
 */
         //  _CustomerBloc.add(CustomerListCallEvent(1,CustomerPaginationRequest(companyId: 8033,loginUserID: "admin",CustomerID: "",ListMode: "L")));
-
       }
     });
   }
@@ -569,7 +570,6 @@ class _TabHomePageState extends BaseState<TabHomePage>
                   state.loginResponse.details[0].customerID.toString())));
 
       // navigateTo(context, DashboardScreen.routeName, clearAllStack: true);
-
     }
   }
 

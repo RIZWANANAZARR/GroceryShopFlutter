@@ -100,7 +100,7 @@ class PushNotificationService {
             AndroidFlutterLocalNotificationsPlugin>()
         ?.createNotificationChannel(channel);
     var androidSettings =
-        const AndroidInitializationSettings('@mipmap/ic_launcher');
+        const AndroidInitializationSettings('@drawable/sk_logo.jpg');
     var iOSSettings = const IOSInitializationSettings(
       requestSoundPermission: true,
       requestBadgePermission: true,
@@ -173,5 +173,4 @@ class PushNotificationService {
   // handle notification data
 
   // start chat screen
-
 }
