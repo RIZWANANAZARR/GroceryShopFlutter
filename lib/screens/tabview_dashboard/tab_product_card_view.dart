@@ -806,7 +806,6 @@ class _TabProductItemCardWidgetState extends State<TabProductItemCardWidget> {
       }
 
       //print("FlagDeBIUG"+isProductinCart.toString() + " DBPRID " + groceryItemdb[i].ProductID.toString() + widget.groceryItem.ProductID.toString());
-
     }
 
     setState(() {});
